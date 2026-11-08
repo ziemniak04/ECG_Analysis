@@ -1,0 +1,13 @@
+code,description,record_count,percent_all_records,zero_likelihood_records,fold_1_records,fold_2_records,fold_3_records,fold_4_records,fold_5_records,fold_6_records,fold_7_records,fold_8_records,fold_9_records,fold_10_records,proposed_records_after
+SR,sinus rhythm,16748,76.82921234919033,16748,1676,1675,1676,1678,1677,1674,1676,1672,1670,1674,16687
+AFIB,atrial fibrillation,1514,6.945272718932061,1466,151,151,151,151,152,151,152,152,151,152,1484
+STACH,sinus tachycardia,826,3.789164640579843,822,82,83,82,83,83,82,83,83,83,82,805
+SARRH,sinus arrhythmia,772,3.5414468553603378,772,77,77,77,77,78,77,78,77,77,77,0
+SBRAD,sinus bradycardia,637,2.922152392311574,637,63,64,63,64,64,63,64,64,64,64,629
+PACE,normal functioning artificial pacemaker,294,1.3486857195284188,7,29,30,29,30,30,30,29,30,29,28,0
+SVARR,supraventricular arrhythmia,157,0.7202165236937474,157,16,16,16,16,16,16,16,16,15,14,0
+BIGU,"bigeminal pattern (unknown origin, SV or Ventricular)",82,0.376164044222212,58,9,8,8,8,8,8,8,9,8,8,0
+AFLT,atrial flutter,73,0.3348777466856278,17,7,7,7,8,8,7,7,8,7,7,0
+SVTAC,supraventricular tachycardia,27,0.12385889260975275,27,3,2,2,3,3,3,3,2,3,3,0
+PSVT,paroxysmal supraventricular tachycardia,24,0.11009679343089132,0,3,2,2,3,2,3,2,2,3,2,0
+TRIGU,"trigeminal pattern (unknown origin, SV or Ventricular)",20,0.0917473278590761,20,2,2,2,2,2,2,2,2,2,2,0

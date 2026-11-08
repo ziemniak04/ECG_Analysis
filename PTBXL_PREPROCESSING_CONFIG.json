@@ -1,0 +1,67 @@
+{
+  "class_indices": {
+    "AFIB": 1,
+    "SBRAD": 3,
+    "SR": 0,
+    "STACH": 2
+  },
+  "class_names": [
+    "SR",
+    "AFIB",
+    "STACH",
+    "SBRAD"
+  ],
+  "cohort_rule": "Exactly one of all 12 original rhythm codes and that code is SR/AFIB/STACH/SBRAD",
+  "dataset_version": "1.0.3",
+  "duration_seconds": 10.0,
+  "expected_leads": [
+    "I",
+    "II",
+    "III",
+    "AVR",
+    "AVL",
+    "AVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "filter_mode": "SOS forward/backward zero-phase, offline",
+  "filtering": {
+    "highpass_hz": 0.5,
+    "lowpass_hz": 45.0,
+    "notch_hz": null,
+    "order": 4,
+    "quality_factor": 30.0
+  },
+  "label_dtype": "int64",
+  "lead_policy": "Require original header order exactly; never relabel or reorder silently",
+  "no_balancing": true,
+  "no_resampling": true,
+  "no_segmentation": true,
+  "no_splits": true,
+  "normalization": {
+    "ddof": 0,
+    "epsilon": 1e-08,
+    "method": "zscore",
+    "scope": "recording_per_lead"
+  },
+  "notch_policy": "Disabled; 50/60 Hz invalid at 100 Hz",
+  "nyquist_hz": 50.0,
+  "output_dtype": "float32",
+  "output_shape": [
+    12,
+    1000
+  ],
+  "output_units": "dimensionless",
+  "sampling_frequency": 100.0,
+  "selection_rule": "First two eligible ecg_id values ascending per class, class order SR/AFIB/STACH/SBRAD",
+  "source_shape": [
+    1000,
+    12
+  ],
+  "source_units": "mV",
+  "version": "ptbxl-rhythm-pilot-v1"
+}

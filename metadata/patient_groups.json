@@ -1,0 +1,303 @@
+{
+  "version": "mitdb-subject-groups-v1",
+  "dataset": "MIT-BIH Arrhythmia Database 1.0.0",
+  "sources": [
+    "https://physionet.org/content/mitdb/1.0.0/",
+    "https://archive.physionet.org/physiobank/database/html/mitdbdir/intro.htm"
+  ],
+  "verified_on": "2026-10-31",
+  "documented_record_count": 48,
+  "documented_subject_count": 47,
+  "interpretation": "Dataset-local grouping tokens, not real subject identities. One subject per record. The documented 201/202 pair and 48-record/47-subject cardinality establish that all remaining records correspond to distinct subjects within this database. No cross-database identity is asserted.",
+  "uncertainty": "Actual subject identities and links outside MIT-BIH are not known. Singleton distinctness is derived from the documented dataset cardinality, not an independently published subject-ID roster.",
+  "recordings": {
+    "100": {
+      "patient_group": "mitdb_group_100",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "101": {
+      "patient_group": "mitdb_group_101",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "102": {
+      "patient_group": "mitdb_group_102",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "103": {
+      "patient_group": "mitdb_group_103",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "104": {
+      "patient_group": "mitdb_group_104",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "105": {
+      "patient_group": "mitdb_group_105",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "106": {
+      "patient_group": "mitdb_group_106",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "107": {
+      "patient_group": "mitdb_group_107",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "108": {
+      "patient_group": "mitdb_group_108",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "109": {
+      "patient_group": "mitdb_group_109",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "111": {
+      "patient_group": "mitdb_group_111",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "112": {
+      "patient_group": "mitdb_group_112",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "113": {
+      "patient_group": "mitdb_group_113",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "114": {
+      "patient_group": "mitdb_group_114",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "115": {
+      "patient_group": "mitdb_group_115",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "116": {
+      "patient_group": "mitdb_group_116",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "117": {
+      "patient_group": "mitdb_group_117",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "118": {
+      "patient_group": "mitdb_group_118",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "119": {
+      "patient_group": "mitdb_group_119",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "121": {
+      "patient_group": "mitdb_group_121",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "122": {
+      "patient_group": "mitdb_group_122",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "123": {
+      "patient_group": "mitdb_group_123",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "124": {
+      "patient_group": "mitdb_group_124",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "200": {
+      "patient_group": "mitdb_group_200",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "201": {
+      "patient_group": "mitdb_group_201_202",
+      "relationship_basis": "explicit_same_subject_201_202",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "202": {
+      "patient_group": "mitdb_group_201_202",
+      "relationship_basis": "explicit_same_subject_201_202",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "203": {
+      "patient_group": "mitdb_group_203",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "205": {
+      "patient_group": "mitdb_group_205",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "207": {
+      "patient_group": "mitdb_group_207",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "208": {
+      "patient_group": "mitdb_group_208",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "209": {
+      "patient_group": "mitdb_group_209",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "210": {
+      "patient_group": "mitdb_group_210",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "212": {
+      "patient_group": "mitdb_group_212",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "213": {
+      "patient_group": "mitdb_group_213",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "214": {
+      "patient_group": "mitdb_group_214",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "215": {
+      "patient_group": "mitdb_group_215",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "217": {
+      "patient_group": "mitdb_group_217",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "219": {
+      "patient_group": "mitdb_group_219",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "220": {
+      "patient_group": "mitdb_group_220",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "221": {
+      "patient_group": "mitdb_group_221",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "222": {
+      "patient_group": "mitdb_group_222",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "223": {
+      "patient_group": "mitdb_group_223",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "228": {
+      "patient_group": "mitdb_group_228",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "230": {
+      "patient_group": "mitdb_group_230",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "231": {
+      "patient_group": "mitdb_group_231",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "232": {
+      "patient_group": "mitdb_group_232",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "233": {
+      "patient_group": "mitdb_group_233",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    },
+    "234": {
+      "patient_group": "mitdb_group_234",
+      "relationship_basis": "distinct_by_documented_cardinality",
+      "grouping_verified_within_dataset": true,
+      "real_patient_identity": null
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.venv/
+.venv-preprocessing/
+__pycache__/
+.pytest_cache/
+data/mitdb/
+data/processed/
+results/preprocessing/

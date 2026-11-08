@@ -1,0 +1,5 @@
+class,class_index,selected_records,selected_patients,exported_records,exported_patients,not_exported
+SR,0,16687,14986,0,0,16687
+AFIB,1,1484,1220,0,0,1484
+STACH,2,805,763,0,0,805
+SBRAD,3,629,608,0,0,629

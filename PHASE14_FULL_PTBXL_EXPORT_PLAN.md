@@ -1,0 +1,15 @@
+# Phase 14 — plan pełnego eksportu PTB-XL (bez wykonania)
+
+Plan wymaga osobnej zgody Magdaleny. Najpierw trzeba zakończyć rzeczywistą część pilota fazy 13: obecnie 0 odczytanych przebiegów z powodu braku DNS. Samo przejście testów na tymczasowych danych nie uprawnia do pełnego eksportu.
+
+1. Pobrać wyłącznie 16 plików wskazanych w manifeście fazy 13, uruchomić adapter w nowym katalogu, sprawdzić 8 poprawnych eksportów, reprezentację SR/AFIB/STACH/SBRAD i cztery wykresy. Zweryfikować jednostki, kolejność odprowadzeń, efekty brzegowe, wartości skończone, statystyki normalizacji oraz zgodność pacjentów i foldów z CSV. Nie zastępować nieudanego zapisu innym bez udokumentowania.
+2. Zamrozić konfigurację i skróty wersji kodu/metadanych. Każda zmiana filtru wymaga jawnego uzasadnienia i nowej wersji; nie zmieniać zachowania MIT-BIH. Ocenić wizualnie 0,5–45 Hz przy 100 Hz; notch 50/60 pozostaje wyłączony. Kontrola wizualna nie jest diagnozą ani oceną modelu.
+3. Dopiero w zatwierdzonej fazie 14 ustalić zakres pobierania waveforms. Kohorta fazy 12: dokładnie jeden rytm spośród wszystkich 12 i jeden z czterech docelowych kodów; 19605 rekordów / 17223 pacjentów przed kontrolą przebiegów. Te liczby nie są wynikiem eksportu. Każdy brak/uszkodzenie lub wykluczenie musi mieć osobny powód i uzgodnienie sum.
+4. Użyć oddzielnego katalogu wersjonowanego, strumieniować po jednym zapisie lub niewielkich shardach. X float32 [n,12,1000], y int64 [n], identyfikatory i oryginalne SCP wyrównane, pełna konfiguracja, jakość i hashe źródeł. Zapisać manifest sukcesów i błędów oraz bezpieczny odczyt bez pickle. Nie nadpisywać wcześniejszego pilota ani MIT-BIH.
+5. Utrzymać 100 Hz / records100 / pełne 10 sekund, bez segmentacji uderzeń i bez łączenia AAMI z rytmami. Normalizacja Z-score osobno na każde odprowadzenie i rekord, po filtracji. Przyszły nowy zapis wymaga tej samej procedury offline. Nie estymować globalnych parametrów z połączonych pacjentów.
+6. Zachować patient_id, ecg_id, strat_fold i wszystkie pierwotne kody oraz likelihood; nie uznawać braku etykiety ani zera likelihood za potwierdzoną negację. Ponownie sprawdzić spójność pacjent–fold, lecz nie tworzyć własnych podziałów. Decyzje o treningu, użyciu foldów i balansowaniu treningu należą do Anny.
+7. Weryfikować dtype/kształt/liczby, odprowadzenia, jednostki, skończoność, deterministyczność wartości, zapis/odczyt i niezmienność źródeł. Przygotować raport rozkładów po faktycznym eksporcie i interfejs danych dla Anny; nie trenować ani oceniać CNN.
+
+Ograniczenia do przekazania: rytmy dotyczą całych 10 sekund i mogą mieć niepewną etykietę; wyłączna kohorta ogranicza reprezentatywność; krótki pilot nie ocenia rzadkich awarii; normalizacja usuwa skalę amplitudy; 100 Hz ogranicza pasmo, filtrowanie offline wymaga całego okna. PTB-XL 12-odprowadzeniowy spoczynkowy i MIT-BIH ambulatoryjny różnią się domeną i zadaniem. Dwa oddzielne produkty danych pozostają oddzielne.
+
+Źródła: istniejące niezmienione raporty fazy 12, `PTBXL_PREPROCESSING_PILOT_REPORT.md`, `PTBXL_PREPROCESSING_CONFIG.json`, `PTBXL_PILOT_MANIFEST.json`, [PTB-XL 1.0.3](https://physionet.org/content/ptb-xl/1.0.3/).
