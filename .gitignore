@@ -5,3 +5,7 @@ __pycache__/
 data/mitdb/
 data/processed/
 results/preprocessing/
+
+models/
+mitdb.zip
+mitdb_unzipped/
