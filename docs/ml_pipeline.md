@@ -5,9 +5,8 @@ Streamlit app). The preprocessing and the data export are described in
 `README_preprocessing.md` and `ECG_DATA_HANDOFF_FOR_ANNA.md` in the repo root.
 This file only covers what was added on top of that.
 
-Status: data loading, splits, models, training and evaluation on the validation
-split are done. The final test evaluation and the Streamlit app are still to do
-(there is a checklist at the bottom).
+Status: data loading, splits, models, training, evaluation (validation and test)
+and the Streamlit app are done (there is a checklist at the bottom).
 
 ## 1. Setup (Windows, PowerShell)
 
@@ -278,10 +277,82 @@ MIT-BIH + RR epoch 13 (of 21), PTB-XL epoch 7 (of 15).
 - The RR features were expected to help class S (early beats). They did not,
   S stays close to zero (6 of 101 correct). V and F improved on validation, Q got
   worse. Macro F1 is 0.617 vs 0.627, which is a tie.
-- These validation differences cannot be trusted much, see the next section: the
+- These validation differences cannot be trusted much, see section 8: the
   validation score of the rare classes depends on one or two patients each.
 
-## 7. Known issues and decisions
+## 7. Results on the test split
+
+Run once, after all decisions were made (the three commands of section 10). Nothing
+was changed afterwards.
+
+### MIT-BIH baseline (19291 beats)
+
+| class | n | precision | recall | specificity | F1 | AUPRC |
+|---|---|---|---|---|---|---|
+| N | 14823 | 0.912 | 0.800 | 0.743 | 0.852 | 0.924 |
+| S | 727 | 0.355 | 0.135 | 0.990 | 0.195 | 0.179 |
+| V | 1630 | 0.666 | 0.782 | 0.964 | 0.719 | 0.873 |
+| F | 33 | 0.000 | 0.030 | 0.885 | 0.001 | 0.002 |
+| Q | 2078 | 0.985 | 0.889 | 0.998 | 0.934 | 0.989 |
+
+### MIT-BIH + RR features (19291 beats)
+
+| class | n | precision | recall | specificity | F1 | AUPRC |
+|---|---|---|---|---|---|---|
+| N | 14823 | 0.830 | 0.812 | 0.448 | 0.821 | 0.878 |
+| S | 727 | 0.625 | 0.371 | 0.991 | 0.466 | 0.434 |
+| V | 1630 | 0.949 | 0.925 | 0.995 | 0.937 | 0.977 |
+| F | 33 | 0.002 | 0.121 | 0.898 | 0.004 | 0.002 |
+| Q | 2078 | 0.098 | 0.038 | 0.958 | 0.055 | 0.265 |
+
+### PTB-XL (1958 ECGs)
+
+| class | n | precision | recall | specificity | F1 | AUPRC |
+|---|---|---|---|---|---|---|
+| SR | 1666 | 0.969 | 0.964 | 0.822 | 0.966 | 0.993 |
+| AFIB | 149 | 0.871 | 0.906 | 0.989 | 0.888 | 0.908 |
+| STACH | 80 | 0.887 | 0.787 | 0.996 | 0.834 | 0.881 |
+| SBRAD | 63 | 0.486 | 0.571 | 0.980 | 0.526 | 0.605 |
+
+### Validation vs test
+
+| model | split | accuracy | macro recall | macro specificity | macro F1 | macro AUPRC | inference (ms, CPU, 1 sample) |
+|---|---|---|---|---|---|---|---|
+| MIT-BIH baseline | val | 0.914 | 0.643 | 0.968 | 0.617 | 0.625 | 1.17 |
+| MIT-BIH baseline | test | 0.781 | 0.527 | 0.916 | 0.540 | 0.594 | 1.34 |
+| MIT-BIH + RR | val | 0.892 | 0.694 | 0.964 | 0.627 | 0.661 | 1.20 |
+| MIT-BIH + RR | test | 0.721 | 0.453 | 0.858 | 0.456 | 0.511 | 1.26 |
+| PTB-XL | val | 0.953 | 0.862 | 0.962 | 0.848 | 0.898 | 3.21 |
+| PTB-XL | test | 0.940 | 0.807 | 0.947 | 0.804 | 0.847 | 3.45 |
+
+### Reading the test results
+
+- **PTB-XL generalises as expected.** Test macro F1 0.804 is close to the
+  validation value 0.848. AFIB (F1 0.888) and STACH (0.834) work well, SBRAD is
+  the weakest class (F1 0.526, mostly confused with SR in both directions).
+- **MIT-BIH validation did not predict test.** Macro F1 dropped from 0.617 to
+  0.540 (baseline) and from 0.627 to 0.456 (RR), and the ranking of the two
+  models flipped. This is what section 8 warned about: validation S, F and Q
+  were one patient each.
+- **RR features help the classes that have many patients.** On the test split S is
+  spread over 6+ records, and the RR model is clearly better there: S F1 0.195 ->
+  0.466 and S AUPRC 0.179 -> 0.434. V improves too: F1 0.719 -> 0.937, AUPRC
+  0.873 -> 0.977. This supports the idea that timing (early beats) matters for S,
+  which the validation split could not show.
+- **RR features hurt Q.** Q F1 drops from 0.934 to 0.055: 1999 of the 2078 Q
+  beats (all from record 107) are predicted as N. Q is a single test patient, and
+  the likely reason (not checked) is that regular paced beats look normal when
+  only the timing is considered. Macro F1 is pulled down mainly by this class.
+- **Class F is not recognised by either model** (F1 <= 0.004, 33 beats from 5
+  records), and both models call about 2000 normal beats F (2194 baseline, 1932
+  RR). F was learned mostly from one training patient (record 213). F predictions
+  of the app must not be trusted.
+- **Caveats:** one training run per model (seed 42), rare classes depend on very
+  few patients, so differences between the two MIT-BIH models should not be
+  over-interpreted. The V and S improvements are the most reliable ones because
+  they come from many records.
+
+## 8. Known issues and decisions
 
 ### MIT-BIH: very few F beats in test and S beats in validation
 
@@ -355,12 +426,17 @@ Consequences:
 
 ### Model choice for MIT-BIH
 
-Decided before looking at test results: both models (baseline and RR) are
-evaluated once on the test split and both are reported as a comparison. The app
-uses the RR model (`mitbih_rr`), because it is better on V (PVC, one of the
-arrhythmias of the project) and F and has the higher macro AUPRC, with the
-caveat above that the evidence is weak. The R-peak detector needed for the app
-gives the positions for the RR features as well.
+Decided before looking at the test results: both models (baseline and RR) are
+evaluated once on the test split and both are reported as a comparison, and the
+app uses the RR model (`mitbih_rr`) as default, because it was better on V (PVC,
+one of the arrhythmias of the project), F and macro AUPRC on validation.
+
+After the test run (section 7) the picture is mixed: RR is much better for S and
+V, but much worse for Q, and worse in macro F1. The pre-declared default was kept
+and nothing was retrained or re-selected on the test set. The app lets the user
+choose between both models, and the report presents both with the full tables.
+Whoever reads the report should know that the RR default was fixed before the
+test results, and that on the test split the baseline has the higher macro F1.
 
 ### Class imbalance
 
@@ -384,8 +460,75 @@ macro F1, per-class recall and AUPRC are reported next to it.
   features).
 - Each model was trained once (seed 42), the variation between seeds was not
   measured.
+- In the app the beats come from an automatic R-peak detector (`wfdb` XQRS) and
+  not from expert annotations as in training, so the windows can be shifted by a
+  few samples. Files with another sampling rate can be resampled, which the
+  models never saw in training.
 
-## 8. Full pipeline (order of commands)
+## 9. Streamlit app (`streamlit_app.py`)
+
+```powershell
+streamlit run streamlit_app.py
+```
+
+Run from the repo root with the venv active, it opens in the browser. It needs the
+trained checkpoints in `models/`. Files: `streamlit_app.py` (the page),
+`src/ml/inference.py` (reading files, preprocessing, running the models),
+`src/ml/viewer.py` (tables and figures) and `.streamlit/config.toml` (colours).
+Inference and viewer code contain no streamlit, so they are tested without the app
+(`tests/test_inference.py`, `tests/test_viewer.py`). Tested with Streamlit 1.67; it
+needs a recent version (`st.fragment`, row selection in tables), if something is
+missing run `python -m pip install -U streamlit`.
+
+**Layout.** The sidebar is only for input: upload a WFDB record (`.hea` and `.dat`
+together) or a `.csv` (one column per lead, sampling rate typed in), or open a record
+from the local `data/` folder, then the model. The task is chosen from the number of
+leads: 2 leads are analysed beat by beat (MIT-BIH models), 12 leads in 10 s windows
+(PTB-XL model). Under "Advanced": resampling (off by default, the models never saw
+resampled data) and the maximum length that is analysed (default 30 min).
+
+The main page, from top to bottom:
+
+1. Summary: number of beats (or windows), heart rate, number and share of flagged ones
+   and the count per class.
+2. Overview of the whole recording: the filtered signal of the chosen lead for the
+   full length, and under it where the flags are (flagged beats per time bin and class,
+   or a ribbon with the rhythm of every window). The part that is shown in detail is
+   marked in blue.
+3. A position slider, "Previous flagged" / "Next flagged", lead and window length.
+4. Detail view: raw and filtered signal of the chosen stretch. Beats are dots, flagged
+   beats carry their class letter and a light red block behind them. For rhythm,
+   every 10 s window is shaded with its class, and "Show all 12 leads" shows all
+   leads one under the other.
+5. List of everything that was flagged, on the right. A class filter above it, click a
+   row to jump to that beat, csv download of the whole list. Normal beats can be
+   added to the list with the filter.
+6. "About the model": test metrics of the chosen model (read from
+   `results/ml/<model>_test_metrics.json`) and its limits.
+
+**Speed.** Analysis (filtering, R-peak detection, classification) runs once per
+recording and settings, not on every click. The slider, buttons and list live in a
+`st.fragment`, so only that part is redrawn. The overview draws a 30 minute recording
+with about 4000 points (min and max per bucket, so peaks stay visible), the detail
+view only draws the shown seconds. Measured on a 30 minute, 2 lead recording
+(648000 samples): analysis about 3.5 s once, redrawing both figures about 35 ms.
+
+**Preprocessing** in the app is the same code as in training: filter the whole
+recording (0.5-45 Hz, order 4, zero-phase, no notch), z-score per lead, then 90
+samples before and 162 after each R-peak (beats) or 10 s windows (rhythm).
+`tests/test_inference.py` checks that this is identical to `src/preprocessing.py`
+and `src/segmentation.py`.
+
+For records from the original datasets the app tells whether the record was in the
+training, validation or test split (needs the cache from `python -m src.ml.data`),
+because results on a training record are better than on a new patient.
+
+Limits: flagged means "not N" (beats) or "not SR" (rhythm), there are no clinical
+rules on top and no episode detection (a run of V beats is a list of single beats).
+Class F predictions are not reliable (section 7). It is a prototype and not a
+medical device.
+
+## 10. Full pipeline (order of commands)
 
 ```powershell
 # setup (once)
@@ -417,21 +560,24 @@ python -m src.ml.evaluate --dataset ptbxl --split val
 python -m src.ml.evaluate --dataset mitbih --name mitbih --split test
 python -m src.ml.evaluate --dataset mitbih --name mitbih_rr --split test
 python -m src.ml.evaluate --dataset ptbxl --split test
+
+# app
+streamlit run streamlit_app.py
 ```
 
-## 9. Commit style
+## 11. Commit style
 
 Conventional Commits: `type(scope): short description`, for example
 `feat(data): add loaders and patient-separated splits`.
 Types that will probably be used (i will edit this later): `feat`, `fix`, `docs`, `test`, `refactor`, `chore`, `build`.
 Scopes: `data`, `model`, `train`, `metrics`, `app`.
 
-## 10. Checklist
+## 12. Checklist
 
 - [x] MIT-BIH and PTB-XL data built and checked
 - [x] data loading and patient-separated splits (`src/ml/data.py`)
 - [x] 1D-CNN models for MIT-BIH (5 classes) and PTB-XL (4 classes)
 - [x] training and validation loop
-- [x] evaluation: accuracy, recall, specificity, macro F1, AUPRC, inference time (validation)
-- [ ] evaluation on the test split (once)
-- [ ] Streamlit app
+- [x] evaluation: accuracy, recall, specificity, macro F1, AUPRC, inference time
+- [x] evaluation on the test split (run once)
+- [x] Streamlit app
