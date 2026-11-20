@@ -9,3 +9,6 @@ results/preprocessing/
 models/
 mitdb.zip
 mitdb_unzipped/
+
+.vscode/
+.streamlit/secrets.toml
