@@ -1,0 +1,15 @@
+{
+  "batch_size": 32,
+  "cpu_threads": 2,
+  "device": "cpu",
+  "epochs": 15,
+  "learning_rate": 0.001,
+  "loss_strategy": "sqrt_balanced",
+  "min_delta": 0.0,
+  "num_workers": 0,
+  "patience": 4,
+  "seed": 42,
+  "train_cache_shards": 29,
+  "validation_cache_shards": 10,
+  "version": "mitbih-training-v1"
+}

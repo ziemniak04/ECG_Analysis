@@ -1,0 +1,4 @@
+# Install explicitly into .venv; do not modify system Python.
+# CPU wheels only. Existing preprocessing requirements remain unchanged.
+--index-url https://download.pytorch.org/whl/cpu
+torch>=2.7,<3

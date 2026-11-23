@@ -1,0 +1,17 @@
+{
+  "mode": "short_baseline",
+  "epochs": 2,
+  "batch_size": 16,
+  "learning_rate": 0.001,
+  "seed": 42,
+  "device": "cpu",
+  "cpu_threads": 1,
+  "num_workers": 0,
+  "train_per_class": 32,
+  "validation_per_class": 16,
+  "max_train_batches": 8,
+  "max_validation_batches": 4,
+  "class_weighted_loss": false,
+  "patience": 5,
+  "min_delta": 0.0
+}

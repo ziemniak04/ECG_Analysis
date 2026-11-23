@@ -1,0 +1,971 @@
+{
+  "schema": "ecg-safe-publication-v1",
+  "branch": "feature/ptbxl-1dcnn",
+  "origin": "https://github.com/ziemniak04/ECG_Analysis.git",
+  "base_commit": "b5859b6b1b6d026428fcd5a4364c1951d4c62502",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 894,
+      "sha256": "8f64960be0cdff9d74581acf1351a6c3d604d10217448634cdd3b545a71e0273"
+    },
+    {
+      "path": "DATASET_FOR_ANNA.md",
+      "bytes": 15018,
+      "sha256": "3b486faa118a17fdbddc8e0469eb73781f86255e41a070e9f40f8931071a69d7"
+    },
+    {
+      "path": "ECG_DATA_HANDOFF_FOR_ANNA.md",
+      "bytes": 10507,
+      "sha256": "34e4529d2797fbc9c3ba941a24a31539e4f93b9a1a9523f8db91203181304f12"
+    },
+    {
+      "path": "EXPERIMENTS_OVERVIEW.md",
+      "bytes": 2508,
+      "sha256": "834606d217249b4d6e35df0f72241bfce844a39eded61ab0861b1bbb4225324c"
+    },
+    {
+      "path": "FINAL_ECG_DATA_VALIDATION_REPORT.md",
+      "bytes": 7078,
+      "sha256": "ec920cdda4d276e66b5b3a7c7a5a1c1b88b8ae0f5ee36c485efd9fe1c731e648"
+    },
+    {
+      "path": "FINAL_ECG_VISUAL_VALIDATION.md",
+      "bytes": 11461,
+      "sha256": "c75d32c46b15d20a61f146110000a016d6906b654db54d2654e54966ba6bb235"
+    },
+    {
+      "path": "FINAL_MITBIH_EXPORT_REPORT.md",
+      "bytes": 3898,
+      "sha256": "743fb0b6dc20b9cc0ab606e8dd5f2b7d78c1a5d51bc09a8bb969b937cc8e6c8d"
+    },
+    {
+      "path": "MITBIH_MODEL_ARCHITECTURE.md",
+      "bytes": 3083,
+      "sha256": "ebde891ae6dea898382a0ebb29782b180249393a87a6b8e2e8d15c8d9185a7e0"
+    },
+    {
+      "path": "MITBIH_TRAINING_SETUP.md",
+      "bytes": 8441,
+      "sha256": "5166fb376eb986e9c89f6cc03585562b66d253682e1a38e2f710875535833277"
+    },
+    {
+      "path": "PHASE13_PTBXL_PREPROCESSING_PLAN.md",
+      "bytes": 8138,
+      "sha256": "342a3015e966bc88ee2810a7e7e00b6c8b8240d7d2f1dcc9256dd0943bc633b7"
+    },
+    {
+      "path": "PHASE14_FULL_PTBXL_EXPORT_PLAN.md",
+      "bytes": 3302,
+      "sha256": "a7258bdd7c4273a5a00cdaacd47a81fc0ed1444bcc7dc8f46ca34f531d53539e"
+    },
+    {
+      "path": "PHASE16_MODEL_SETUP_REPORT.md",
+      "bytes": 9101,
+      "sha256": "13a134777ceb202aecf01c2d2e0903ee2f8c7524bcbacd84607d8667497ac094"
+    },
+    {
+      "path": "PHASE17_TRAINING_REPORT.md",
+      "bytes": 11064,
+      "sha256": "d5397e9dc3c4351d0072941105694d5ac6b93b337f6ce88e629315ea9b376e20"
+    },
+    {
+      "path": "PHASE18_FULL_TRAINING_PLAN.md",
+      "bytes": 3064,
+      "sha256": "e3f8bdffa1ee8e59dba56a31afb1073419b4f82813dcc673c6e31be95b68cc23"
+    },
+    {
+      "path": "PHASE18_FULL_TRAINING_REPORT.md",
+      "bytes": 13619,
+      "sha256": "44bccd92a8346dee84b32970b2e4b8b488e9474e3c0903ff6912de4e6ea27e14"
+    },
+    {
+      "path": "PHASE18_READINESS_REPORT.md",
+      "bytes": 12595,
+      "sha256": "869abfce083a4108ede5b6a2201811f44f197466d925b0b6b99e69fb6e10d22e"
+    },
+    {
+      "path": "PHASE20_MITBIH_SETUP_REPORT.md",
+      "bytes": 8405,
+      "sha256": "e2001a15e633802f64592736bc1f9e101283a83c35d66303a8b51d02ae092234"
+    },
+    {
+      "path": "PHASE21_MITBIH_TRAINING_CONFIG.json",
+      "bytes": 306,
+      "sha256": "1daa638fe9d8281521fa559cba1e0b897288ab3114a445bf3a0d4445aeb79b1a"
+    },
+    {
+      "path": "PHASE21_MITBIH_TRAINING_READINESS_REPORT.md",
+      "bytes": 13527,
+      "sha256": "ec70fda830e724df6ba601d626dc662aea0668eb7692f00bf1cc482e90031c92"
+    },
+    {
+      "path": "PHASE22_MITBIH_FULL_TRAINING_PLAN.md",
+      "bytes": 6389,
+      "sha256": "96c961b54cecf651abb9c2a1a341853fbf43d122dc2528dd63aa16022139b2bb"
+    },
+    {
+      "path": "PHASE22_MITBIH_FULL_TRAINING_REPORT.md",
+      "bytes": 12088,
+      "sha256": "ad82f48b1031f3ba8608c8a6a1f2293682bd2a7a4d93fb66ab3313b6adc9d1aa"
+    },
+    {
+      "path": "PHASE23A_MITBIH_UNWEIGHTED_REPORT.md",
+      "bytes": 19089,
+      "sha256": "846f96e5b8b507441a878055c404e0e126c9deaded616ab4bbd47c270d92143f"
+    },
+    {
+      "path": "PROPOSED_RHYTHM_PREPROCESSING_PLAN.md",
+      "bytes": 10215,
+      "sha256": "230a058a7cdeffa4f36f636658d65a6bd76f08d8073c75d7379eafd068d00a92"
+    },
+    {
+      "path": "PTBXL_CLASS_DISTRIBUTION.csv",
+      "bytes": 207,
+      "sha256": "10eb80a0a390d4df9573e2b13a181d65a750f6d15fb63e8022f7eadce1739557"
+    },
+    {
+      "path": "PTBXL_DATASET_FOR_ANNA.md",
+      "bytes": 7897,
+      "sha256": "cfabbbdf3512d793cf5dd24fb8032cda8d48d16224eb4adc5f8f1e78cec99cc2"
+    },
+    {
+      "path": "PTBXL_FULL_EXPORT_REPORT.md",
+      "bytes": 13299,
+      "sha256": "e734da70390a891ca140337983e6fddd5ed1337445c48ac1349b93c9d81d9a62"
+    },
+    {
+      "path": "PTBXL_LABEL_COOCCURRENCE.csv",
+      "bytes": 2358,
+      "sha256": "90d1e44bdcbf8b5efb15c6d40c281c96ad9f3795c227b1a20a2bfa8325069503"
+    },
+    {
+      "path": "PTBXL_METADATA_AUDIT.md",
+      "bytes": 14067,
+      "sha256": "16192340d15b553997668f18f361286febeec171216f81a6d9ad23231d0b94bb"
+    },
+    {
+      "path": "PTBXL_MODEL_ARCHITECTURE.md",
+      "bytes": 3712,
+      "sha256": "299d7ce5bc9e22617875d42a948b277e2f845db8d875fca0b005da3fa949f7ee"
+    },
+    {
+      "path": "PTBXL_PATIENT_FOLD_DISTRIBUTION.csv",
+      "bytes": 872,
+      "sha256": "06a0a262bdf0b028c27455e63706c65f5de207ad20e6a2f3139351eef66c76fd"
+    },
+    {
+      "path": "PTBXL_PREPROCESSING_CONFIG.json",
+      "bytes": 1429,
+      "sha256": "fdff8ca3056e9a99ab7e0a1375a1945624b0c6aa5ff9a8cded8977408e5148e1"
+    },
+    {
+      "path": "PTBXL_PREPROCESSING_PILOT_REPORT.md",
+      "bytes": 8528,
+      "sha256": "9021b170aff9a91997130c90a132998177a2751493d447e0ad222f454e26d0c2"
+    },
+    {
+      "path": "PTBXL_RHYTHM_CLASS_COUNTS.csv",
+      "bytes": 1365,
+      "sha256": "b0c9f8d84d6ae05289c1ad9e3779fcddb2776c7d1b486adbe15dbf6c3fc5d290"
+    },
+    {
+      "path": "PTBXL_RHYTHM_LABEL_PROPOSAL.md",
+      "bytes": 8162,
+      "sha256": "b84f0dddafbb6d723b7019d56fa3eca08958f46757caddad5edec59978fcb6a3"
+    },
+    {
+      "path": "PTBXL_RHYTHM_PATIENT_COUNTS.csv",
+      "bytes": 1069,
+      "sha256": "cff8853f34bfa5f69a8f1a3e8b53e5a9b265c8b16e69c18d50d36d47226ad30f"
+    },
+    {
+      "path": "PTBXL_TRAINING_GUIDE.md",
+      "bytes": 10063,
+      "sha256": "d1a530011abcf0bd30866660b0945f02a66a3f4e8fcb93fe90a30b6b2fb0be3f"
+    },
+    {
+      "path": "PTBXL_TRAINING_SETUP.md",
+      "bytes": 8276,
+      "sha256": "fe9cdccfc35111400acf0a92a7fbc1ee7d244f9d1804b011d1aa56180fd5a2e6"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4927,
+      "sha256": "d87418c786abd2cfa9347e921f1b901a7e03ef796c17ca74ee433f01c6719029"
+    },
+    {
+      "path": "README_preprocessing.md",
+      "bytes": 76389,
+      "sha256": "36d0b18bef031fef34c14639b6ac39a356ab2d139c7c0440c4503b1be85e79f8"
+    },
+    {
+      "path": "RHYTHM_CLASS_FEASIBILITY.md",
+      "bytes": 7597,
+      "sha256": "159876eab5e22e12ab91dc9569ed7a8f47c9ac50de5b2416b1583f64eca2ba62"
+    },
+    {
+      "path": "RHYTHM_DATASET_AUDIT.md",
+      "bytes": 13119,
+      "sha256": "8360ff05d12a3059d10369077d2f3d1a8e78d131f080afb8ff71fde2fb20d546"
+    },
+    {
+      "path": "RHYTHM_LABEL_COMPATIBILITY.csv",
+      "bytes": 5614,
+      "sha256": "d44e4ce16b305df3abd5d93cb45568ed4dc0ed440b9708caf76df0f0c69e5eaf"
+    },
+    {
+      "path": "STREAMLIT_INTEGRATION_HANDOFF.md",
+      "bytes": 10338,
+      "sha256": "7d272933259f14a5c06a299d85889cd074d09339c5a88ba4e2b324bae3a081ee"
+    },
+    {
+      "path": "configs/mitbih_patient_split_v1.json",
+      "bytes": 4227,
+      "sha256": "8c5cc28d8dcae170fd222432d9f247fd19207ba01be60763241da4b7cae61831"
+    },
+    {
+      "path": "configs/ptbxl_cnn_v1.json",
+      "bytes": 254,
+      "sha256": "5d39f5259d45c1b767f8da60ad9b1138b795d189750a92664e89bcf3cf37205d"
+    },
+    {
+      "path": "configs/ptbxl_phase17_baseline.json",
+      "bytes": 345,
+      "sha256": "f5ff08a44d5f224b2b86a5b6dc376b0264c655971bf6c0a3531da3252f8303f1"
+    },
+    {
+      "path": "configs/ptbxl_phase18_full_v1.json",
+      "bytes": 345,
+      "sha256": "128ec326947d7d86d740f42e6f2ee3f209e0efa316d3a3931d267dd1771d595c"
+    },
+    {
+      "path": "docs/FEATURE_BRANCH_PUBLICATION_PLAN.md",
+      "bytes": 5673,
+      "sha256": "5b7c5e86ad78f648aa44407263b0bff9d6d96d109c167c94ca41bc3cb2a68b72"
+    },
+    {
+      "path": "docs/PUBLICATION_NOTES.md",
+      "bytes": 3248,
+      "sha256": "de690c3ead40fcbbd1e4ec1303810a111cc4e116e117bd722b9c3cf566e706f0"
+    },
+    {
+      "path": "docs/experiments/SUMMARY_PROVENANCE.json",
+      "bytes": 1317,
+      "sha256": "84bd164540316ed57afd16c5d4741734feac90dc42bea286e5b6b93c5d6c7a72"
+    },
+    {
+      "path": "docs/experiments/mitbih_final_test.json",
+      "bytes": 2434,
+      "sha256": "2688aa8161d4a1392b973c0b1399b2b58b16bce9330322d34d9d645fc8502658"
+    },
+    {
+      "path": "docs/experiments/mitbih_phase24b_validation.json",
+      "bytes": 2417,
+      "sha256": "144f5a6851e78f22e661b4d89a75a7b156a38054a34697ef764079e6fb2f1878"
+    },
+    {
+      "path": "docs/experiments/mitbih_phase25b_validation.json",
+      "bytes": 2402,
+      "sha256": "03342809b992497332f831957a89911b6b23d8ccfd280c8ff2a4843ae1781a50"
+    },
+    {
+      "path": "docs/experiments/ptbxl_final_test.json",
+      "bytes": 2050,
+      "sha256": "ab404dd1c690c5163497c170e8ee963c274faca2d739b8f795efc99af8bfda3c"
+    },
+    {
+      "path": "examples/analyze_class_imbalance.py",
+      "bytes": 5976,
+      "sha256": "0f3db992a70be4dfef5202c88a9ddb45de7a42eb57f56681280b76098852b605"
+    },
+    {
+      "path": "examples/analyze_mitbih_f_confidence.py",
+      "bytes": 17133,
+      "sha256": "6590633e31c0117d7bebff253658af6730a6422217fb70e89a7e57de7101054e"
+    },
+    {
+      "path": "examples/analyze_sbrad_validation.py",
+      "bytes": 13328,
+      "sha256": "ae3f002385e4e62b69f268f5928a4f97932ca042d01ff386839c889fec3ac44c"
+    },
+    {
+      "path": "examples/audit_mitbih_errors.py",
+      "bytes": 13390,
+      "sha256": "38945cc3218fcce64cb79a532ef7089dad5fe86eff2eb834361832ec37ce39b5"
+    },
+    {
+      "path": "examples/audit_ptbxl_metadata.py",
+      "bytes": 5941,
+      "sha256": "84f6574bc104ea17c7d0d4e4ad5e765c97dafa229548d508871e74d88b8f1e8f"
+    },
+    {
+      "path": "examples/audit_ptbxl_optimization_completion.py",
+      "bytes": 6907,
+      "sha256": "7a89f74f59192995ee412c4a09c2306635765ed1a398cfb0de59522b89b618ba"
+    },
+    {
+      "path": "examples/audit_rhythm_datasets.py",
+      "bytes": 3130,
+      "sha256": "16cc4178e58e003a90e457830013b2f1e7d71a8eda8b49ab6ce3a364f08f347e"
+    },
+    {
+      "path": "examples/benchmark_mitbih_cpu.py",
+      "bytes": 368,
+      "sha256": "c039356025668211bcf587ea819890142cb792ad52a7f05e2983fa7237e50162"
+    },
+    {
+      "path": "examples/benchmark_ptbxl_cpu.py",
+      "bytes": 945,
+      "sha256": "1ed88ff6c6f67360dfa6c16c9be1d4a95925d0f9e8f059fcb6c1c954862f4a9e"
+    },
+    {
+      "path": "examples/compare_mitbih_cnn_rr.py",
+      "bytes": 9657,
+      "sha256": "92f38b8d20b2ff7dc9b2c22f2ca470c2514e63dfe375faf0acf4b86b2c6d5ff6"
+    },
+    {
+      "path": "examples/compare_mitbih_reduced_f.py",
+      "bytes": 10081,
+      "sha256": "6a279a0a7bf269c854ae30bedb806f7b07e68faeef7f669e2911dc2a463bcce9"
+    },
+    {
+      "path": "examples/compare_mitbih_unweighted.py",
+      "bytes": 11849,
+      "sha256": "de597a7ac82b4da17525cc1c39465bc08e2ad1a8b2402c98b7f53fd3fc4df06d"
+    },
+    {
+      "path": "examples/compare_preprocessing.py",
+      "bytes": 1400,
+      "sha256": "0c5e2a6b9a6a4601540aa8d318348df9ccbb30f1622654fdbfce095f34e0d521"
+    },
+    {
+      "path": "examples/compare_ptbxl_loss_models.py",
+      "bytes": 15254,
+      "sha256": "a8baf9756d83397e00f4bd43ea90406f72ee305927081e5d43ee7ed9ea99d8b2"
+    },
+    {
+      "path": "examples/evaluate_mitbih_final_test.py",
+      "bytes": 706,
+      "sha256": "fb211843b64aff882c6a32a91f71d62d083b63248c6a23c3aaf76ad3e7a0ce88"
+    },
+    {
+      "path": "examples/evaluate_ptbxl_final_test.py",
+      "bytes": 17317,
+      "sha256": "f650d0f0b3d2e2a25e32f41b4042e3c383d2f50beb1301caef7c3326a6ca99e5"
+    },
+    {
+      "path": "examples/filter_ecg.py",
+      "bytes": 2633,
+      "sha256": "92c625c7b872d0154e0b02a0068ec9dfa2bdc761d1e69203d7e8618937a2b74c"
+    },
+    {
+      "path": "examples/final_ecg_visual_validation.py",
+      "bytes": 19969,
+      "sha256": "12ddbe8aa6abb712eb1e491b2144ba08d152f7be0a184ebee4d7cf684125b041"
+    },
+    {
+      "path": "examples/finalize_mitbih_f_confidence.py",
+      "bytes": 7043,
+      "sha256": "3daac9b7daf9820fc64c744a7ea17ba02d67c79c9cfbd6e9f3ede5acbbfce62f"
+    },
+    {
+      "path": "examples/finalize_mitbih_final_test.py",
+      "bytes": 11151,
+      "sha256": "b23acdee89d505df7d43247217bf0a2d7735cec116c36f6cb079908a9b336b28"
+    },
+    {
+      "path": "examples/inspect_ecg.py",
+      "bytes": 1761,
+      "sha256": "f5c0a58169ad92fd537beebc5b7e1f1b7ca5ef5de256e0cb635c4056cdb8a508"
+    },
+    {
+      "path": "examples/map_heartbeat_labels.py",
+      "bytes": 6378,
+      "sha256": "aa089a3289f7c9da2b7a3f4e0e124cf479183b8a1f9c561c1098f2dcdfac937a"
+    },
+    {
+      "path": "examples/normalize_ecg.py",
+      "bytes": 3612,
+      "sha256": "e48fcfb1d49e35f8ab4c92cc706ac2baf84fc2b0c407a9fa09cf275b8dc8b0a2"
+    },
+    {
+      "path": "examples/optimize_ptbxl_losses.py",
+      "bytes": 1661,
+      "sha256": "bad4b4b2056d2fc4d0597990c7e6ebbccfc3f4a94c1f8e669e922fa608678576"
+    },
+    {
+      "path": "examples/phase16_model_smoke.py",
+      "bytes": 7041,
+      "sha256": "0d72fb8c65d117063417896f4040b0d2880cd9ff34d8c4763d97a68e40f62afc"
+    },
+    {
+      "path": "examples/prepare_mitbih_rr.py",
+      "bytes": 6690,
+      "sha256": "3eeb9a236d8a2f0af20e3094c4585d79f3103dde9fbefc7ec0537d7a4bbe5744"
+    },
+    {
+      "path": "examples/prepare_ptbxl_pilot.py",
+      "bytes": 8130,
+      "sha256": "04d6ae51a97d0835912c589d6827ced993fc19569b3de8e36aa317329c6d2ba5"
+    },
+    {
+      "path": "examples/pytest_mitbih_holdout_guard.py",
+      "bytes": 2207,
+      "sha256": "23ff6b6be2a77dcaf0cafe0530c2bf5842d4d9717a502f6f03a1ec7359af9461"
+    },
+    {
+      "path": "examples/report_mitbih_cnn_rr.py",
+      "bytes": 20901,
+      "sha256": "8efb907fbef8a8e4b21b4be71641da6ee38e36757a100182050ea6be8ff7833c"
+    },
+    {
+      "path": "examples/report_mitbih_error_audit.py",
+      "bytes": 23984,
+      "sha256": "e544a00ce9285f72b263a1522e56e8a1a9fa68832e95ab6806cc81104abc0531"
+    },
+    {
+      "path": "examples/report_mitbih_final_test.py",
+      "bytes": 12889,
+      "sha256": "b298aa1ce9982e16718a350e57cc8d937f117923ec21ecb2a04c2a6f7dcf48d0"
+    },
+    {
+      "path": "examples/report_mitbih_phase22.py",
+      "bytes": 15841,
+      "sha256": "329d7a934c29351a27945c1377aacd027fec1a4d4a52d7760c9c3b6797042853"
+    },
+    {
+      "path": "examples/report_mitbih_reduced_f.py",
+      "bytes": 18101,
+      "sha256": "75799f627dc5e31df5b3447f0ffc88480fff0d8ac95e950e3db8daa6850df2a5"
+    },
+    {
+      "path": "examples/report_mitbih_unweighted.py",
+      "bytes": 17734,
+      "sha256": "0666581f0c5dcbec1e1edcb1c6c2882ba552930de95ed0f9eddc99268b4adabb"
+    },
+    {
+      "path": "examples/report_ptbxl_optimization.py",
+      "bytes": 20961,
+      "sha256": "61d8eea6e7833bcadab5926c6a50ece345cd0bfe989106802611e9f4227e5115"
+    },
+    {
+      "path": "examples/run_mitbih_phase22.py",
+      "bytes": 903,
+      "sha256": "b0edc9350ff48bc0f9cc2913dad58f969349043395dbe44c051d2335526e39a6"
+    },
+    {
+      "path": "examples/run_phase18_full.py",
+      "bytes": 1403,
+      "sha256": "66e2da14995c4bdd27b59d09a6b4bf70421737e903414e4207ed2e9565dd32ea"
+    },
+    {
+      "path": "examples/segment_ecg.py",
+      "bytes": 3913,
+      "sha256": "5edf341b5f13592d2e01e9eda4137ab9893ccae56550494848e6679695be0728"
+    },
+    {
+      "path": "examples/setup_mitbih_model.py",
+      "bytes": 10707,
+      "sha256": "4bef088e93954f4dd1f2c0608f759f8ede61db44656c4e9f39e880658b35db91"
+    },
+    {
+      "path": "examples/train_mitbih.py",
+      "bytes": 1370,
+      "sha256": "e7167d5795181ea419ab9b3b0ec738528e283c256a681ed1b647ec5081a8918b"
+    },
+    {
+      "path": "examples/train_mitbih_cnn_rr.py",
+      "bytes": 6314,
+      "sha256": "64f506e6f68bc01fcb08ad750c724a0b7d474d758c0609688e0f205ea0e8f53b"
+    },
+    {
+      "path": "examples/train_mitbih_reduced_f.py",
+      "bytes": 7732,
+      "sha256": "decc80232613ed3154359eac740a48540a93a347a8107ba4c17f784bfcfc4e02"
+    },
+    {
+      "path": "examples/train_mitbih_unweighted.py",
+      "bytes": 534,
+      "sha256": "97f5db6cdc5f616e4d8004591ff0b13a7eb3c604af3b87a8791ec9b6e9781c3b"
+    },
+    {
+      "path": "examples/train_ptbxl_baseline.py",
+      "bytes": 2013,
+      "sha256": "a4e9cf61045818380d12b5edf799db12f84d69a18b9b3e6fdf713aa32f4ffc16"
+    },
+    {
+      "path": "examples/train_ptbxl_optimization_pair.py",
+      "bytes": 1456,
+      "sha256": "891a6bd6fdf11b709b3a19bff2aec9637abcbfe64c88a8aeacfe7f303caadd6b"
+    },
+    {
+      "path": "examples/validate_phase18_full.py",
+      "bytes": 4713,
+      "sha256": "5f445c4a84ef09c54ed04ae73da9046949dd6f5ef656a5fcbd197920099c0b4f"
+    },
+    {
+      "path": "metadata/patient_groups.json",
+      "bytes": 11051,
+      "sha256": "01fb9949e949624f563f49066d97be366e99d460f38c35d3793e1dd5ab3d6cb9"
+    },
+    {
+      "path": "requirements_model_cpu.txt",
+      "bytes": 198,
+      "sha256": "09fb1e01622af0b2db5ce1a79d9d3ed1151240376aba527db0d465ee841067c1"
+    },
+    {
+      "path": "requirements_phase4.txt",
+      "bytes": 49,
+      "sha256": "d2a055bf8bd8219cc82ef27a7bf259567aa5287530050c92ae670c756ff22d73"
+    },
+    {
+      "path": "requirements_preprocessing.txt",
+      "bytes": 61,
+      "sha256": "967b9c655daba73bac961bccfc371da44839ff3e5d1a9133c4de39c45269aff7"
+    },
+    {
+      "path": "scripts/publish_verified_handoff.py",
+      "bytes": 9860,
+      "sha256": "e8d5b6256faf33f5c7c67d34879457628f93910c7d4e491f369d14ff177fc8ce"
+    },
+    {
+      "path": "src/__init__.py",
+      "bytes": 50,
+      "sha256": "0fe10c9b27a495e461543d48fd04dd8f6b33d387b38da3c3ac5ba377030c8474"
+    },
+    {
+      "path": "src/class_imbalance.py",
+      "bytes": 10801,
+      "sha256": "a3cd4ba4b9d74c02802208dc6e97eee813dd778b7ba5ea0e21a996761cf392f1"
+    },
+    {
+      "path": "src/data_loader.py",
+      "bytes": 4012,
+      "sha256": "2a47e7ed1b2160b1702f00d49dde96244fa901d5cd5d3059df7d4f65560b444a"
+    },
+    {
+      "path": "src/label_mapping.py",
+      "bytes": 7618,
+      "sha256": "027aa46fef291a7f7fde0018923f6f9c458afe46e08f4d156a46e09a36fc260e"
+    },
+    {
+      "path": "src/mitbih_cnn_rr_evaluation.py",
+      "bytes": 4913,
+      "sha256": "9d68d057be4f4d477bf8e410a76565a123514e75a6c11291f8d4efce1b109604"
+    },
+    {
+      "path": "src/mitbih_cnn_rr_training.py",
+      "bytes": 15544,
+      "sha256": "04c83c07080feb3207f4ca85393e410a6218f28812718f256cd3851e91037fc2"
+    },
+    {
+      "path": "src/mitbih_error_audit.py",
+      "bytes": 12821,
+      "sha256": "735ea56e7d29e01ce9d0135b769b7c66d8715ecd7d07567ecf4f48216b6006be"
+    },
+    {
+      "path": "src/mitbih_execution_guard.py",
+      "bytes": 4022,
+      "sha256": "e95c16139c4c98510014f448050ebae82ed7bae31675c8c819a8aefea0f44efe"
+    },
+    {
+      "path": "src/mitbih_f_decisions.py",
+      "bytes": 2412,
+      "sha256": "37e511b1378db8775d5aadf28de122d43a7af5ac46322f42e7bc19641aacf775"
+    },
+    {
+      "path": "src/mitbih_final_reporting.py",
+      "bytes": 1756,
+      "sha256": "fe33bbd376ea1ad68efa776b55342f86e2218ee51172b815c95341ee11148950"
+    },
+    {
+      "path": "src/mitbih_final_test.py",
+      "bytes": 16443,
+      "sha256": "3f2bf0ac2c3f902f463fea26f146ce2bed549afa761d6d94fa273831e33df38c"
+    },
+    {
+      "path": "src/mitbih_full_run.py",
+      "bytes": 13446,
+      "sha256": "1f8597a459cb56577ac9f8065df7b66d6efd49ebb47554d009f14bb7a6a2f2a7"
+    },
+    {
+      "path": "src/mitbih_metrics.py",
+      "bytes": 2245,
+      "sha256": "6b15971004fdd2b1f9443d818bee50b1e01f38f258f3f0f5cd34c0d806c67c8a"
+    },
+    {
+      "path": "src/mitbih_model_config.py",
+      "bytes": 1661,
+      "sha256": "0153e8738455b201f30948b52153d14cfcf0f08db2fdbf007e89cdcd6cd3dfe1"
+    },
+    {
+      "path": "src/mitbih_protocol.py",
+      "bytes": 13743,
+      "sha256": "c52ff9f7003e3bc01ed463bdd7bde475ae96e24ecf79d4a64483a883e46a34d5"
+    },
+    {
+      "path": "src/mitbih_readiness.py",
+      "bytes": 8991,
+      "sha256": "a833ca702646f48c2f6cafd151bb260b0c9aa155cb3604af774cbb4fc230987f"
+    },
+    {
+      "path": "src/mitbih_reduced_f_training.py",
+      "bytes": 7637,
+      "sha256": "f8544d2671febcc8e6591ef409b11829869020b9b9f6f643916c270ca8a5e2b1"
+    },
+    {
+      "path": "src/mitbih_rr.py",
+      "bytes": 6592,
+      "sha256": "54150ab2ac6016a90dddeeac94dda4ae54bcb6af8993aa2ef71991def3fe70a5"
+    },
+    {
+      "path": "src/mitbih_rr_config.py",
+      "bytes": 720,
+      "sha256": "67da0704f2742dbfd335bdfc93f933de5ab4c16a3ccaf837ee7eedcf1d17babf"
+    },
+    {
+      "path": "src/mitbih_rr_dataset.py",
+      "bytes": 12827,
+      "sha256": "cd86c862b791b33a17277e73d8b42bf16f26372fcade7889cfb74a34ce37d409"
+    },
+    {
+      "path": "src/mitbih_torch.py",
+      "bytes": 4795,
+      "sha256": "1b5fb24cc3d21a3b4b62f3d6d76400c9f10a0f8d3493a12310bed5be13b4568b"
+    },
+    {
+      "path": "src/mitbih_training.py",
+      "bytes": 16679,
+      "sha256": "94ea8fb6973fc521bbceb3f16fe1b0f913fe9b6819601e095e5fa2da1a991875"
+    },
+    {
+      "path": "src/mitbih_unweighted.py",
+      "bytes": 8898,
+      "sha256": "8cf6d9e308c2f65d5a90876fbd66e1758190ff1fa7f44f99dc39a224980fac04"
+    },
+    {
+      "path": "src/models/__init__.py",
+      "bytes": 81,
+      "sha256": "ce7b392f6bacff4459a8f94d8454b04d9a1731583ad7c9c93f91a58efaf47ae7"
+    },
+    {
+      "path": "src/models/mitbih_cnn.py",
+      "bytes": 1628,
+      "sha256": "f60effed4e89c20f2c538712f66517108f49f71a31393dcf71888f315f58ba4b"
+    },
+    {
+      "path": "src/models/mitbih_cnn_rr.py",
+      "bytes": 1828,
+      "sha256": "ce48e5a5bb4abc49355a785d33b1a1585eb0f971ad1ff93c164034953d5dedfa"
+    },
+    {
+      "path": "src/models/ptbxl_cnn.py",
+      "bytes": 1847,
+      "sha256": "14972d8477da47377ae1a12c2ff87815a44e8700f0ffde91c682993623488976"
+    },
+    {
+      "path": "src/prepare_dataset.py",
+      "bytes": 16988,
+      "sha256": "49be73399d7a7fcebf7ab58d6f5c11df1929f796abfc4dfe84f36f315e5c2955"
+    },
+    {
+      "path": "src/preprocessing.py",
+      "bytes": 15816,
+      "sha256": "77b80385091edc1ae491b8f5b963410008a9d8724569e767edfcab1548f0d68a"
+    },
+    {
+      "path": "src/preprocessing_comparison.py",
+      "bytes": 6657,
+      "sha256": "dd1a6e5e49a0ccafb6e69a933a66c19dacab8f3216ca64abac29f307194890d4"
+    },
+    {
+      "path": "src/ptbxl_bulk.py",
+      "bytes": 23243,
+      "sha256": "6788620dbe56d2d5ab3a24479183cf1a83c748505d35820b60b53eed8fa88e15"
+    },
+    {
+      "path": "src/ptbxl_decisions.py",
+      "bytes": 9354,
+      "sha256": "8c09e3096b3b9f2354a5035929be15eb652798caadc0400e98579cafd8e13cb1"
+    },
+    {
+      "path": "src/ptbxl_final_evaluation.py",
+      "bytes": 14391,
+      "sha256": "7f24110e66fe563f19cca6fec1f31b24f647407fc6296f4e8c9c2d3e5028a52c"
+    },
+    {
+      "path": "src/ptbxl_full_run.py",
+      "bytes": 14396,
+      "sha256": "57d56913185432ee63e2ec0b28f879dddab8290a47cefa94e0d5418c26b20300"
+    },
+    {
+      "path": "src/ptbxl_metadata.py",
+      "bytes": 13666,
+      "sha256": "3931d9e1769de7ffac3bf0177a9991441d0a0c64b8ff678891086bccd0a95ed5"
+    },
+    {
+      "path": "src/ptbxl_metrics.py",
+      "bytes": 3766,
+      "sha256": "697fdb6af6d61e5854d24756d5c95a7c1b1bc7a55115a5e3961bf369b097bd36"
+    },
+    {
+      "path": "src/ptbxl_model_config.py",
+      "bytes": 1939,
+      "sha256": "3b9489d30807f21ca18eafbb8edb76583ca11efb9734fbb098bb6a7947b708c7"
+    },
+    {
+      "path": "src/ptbxl_optimization.py",
+      "bytes": 17449,
+      "sha256": "5e8b5fa6dcbf6629b2b644d15265d8a5c0c8477a527a84a551b16098d6fa476f"
+    },
+    {
+      "path": "src/ptbxl_protocol.py",
+      "bytes": 11529,
+      "sha256": "b7c692faad20b46dc36b8e100487377739596e321faf7d067f02546f9eb1ddf1"
+    },
+    {
+      "path": "src/ptbxl_readiness.py",
+      "bytes": 19510,
+      "sha256": "0eca177e86192feb559f7dc63a1bbe0ef874a078c79b595efd7615d4de939fb1"
+    },
+    {
+      "path": "src/ptbxl_rhythm.py",
+      "bytes": 14244,
+      "sha256": "ca731b3cc2fa4c966f4799edd3f7d5ab0c4de3f0290a8a4afc5b9328719ee1b2"
+    },
+    {
+      "path": "src/ptbxl_torch.py",
+      "bytes": 2253,
+      "sha256": "0e1f47c03c46ef0a64ceed4e576d97f4d59921c289dc6a9cc599dc9ca27c4747"
+    },
+    {
+      "path": "src/ptbxl_training.py",
+      "bytes": 27279,
+      "sha256": "509c6998dafa0260dfcb05009aa4d7d39bf667076aac202b26b0ce6032f2bcd5"
+    },
+    {
+      "path": "src/rhythm_audit.py",
+      "bytes": 13207,
+      "sha256": "2493d478e2626a43158badc6f1af5205cc2d41fa9b68c489716665cb7de2c969"
+    },
+    {
+      "path": "src/segmentation.py",
+      "bytes": 8504,
+      "sha256": "9e16a35287e0a81a294f84dfb6751e21b6a258b6e71d10e6cc3032dd9dcd6bdb"
+    },
+    {
+      "path": "src/visualization.py",
+      "bytes": 3618,
+      "sha256": "58fbeaa643ba471f716072b93a35f01afaeb35ee168bc2a9271ee039fce8e94b"
+    },
+    {
+      "path": "tests/test_class_imbalance.py",
+      "bytes": 8402,
+      "sha256": "89b97cf02c58ecb1e69e8039f85ef89796a0b2d1cf7d536c1a051c4492a9cfe9"
+    },
+    {
+      "path": "tests/test_data_loader.py",
+      "bytes": 2999,
+      "sha256": "66a32924e4494b5eb5924175e324551c453e17301fb21c96fdf223379d9129ca"
+    },
+    {
+      "path": "tests/test_final_visual_validation.py",
+      "bytes": 4601,
+      "sha256": "1b0f29fc11c5bb3d619470b12645ac8378e603dbdb08ff9c212fe90c1fe499f6"
+    },
+    {
+      "path": "tests/test_label_mapping.py",
+      "bytes": 7580,
+      "sha256": "48421e2c0bd61dd141fd3fc340c8d4a5fa386bb343ed8e507ed20076b04e87f9"
+    },
+    {
+      "path": "tests/test_mitbih_cnn_rr_evaluation.py",
+      "bytes": 2970,
+      "sha256": "75a4be6f3f1e5136506e05fa2a37770ed7c97ea005de7d87737111db6856b922"
+    },
+    {
+      "path": "tests/test_mitbih_cnn_rr_training.py",
+      "bytes": 4635,
+      "sha256": "e623ab7a8c1cc074612d3c6d30f76444706e6314fd2fb60114f7504928e0c2dc"
+    },
+    {
+      "path": "tests/test_mitbih_error_audit.py",
+      "bytes": 4845,
+      "sha256": "9ce3fe5448c31ed6980e804c2e5298663d413b7d33f6f7f659812eeff82c903d"
+    },
+    {
+      "path": "tests/test_mitbih_f_decisions.py",
+      "bytes": 1597,
+      "sha256": "c144c1d32eb4caa52955eac2272090da44677c9f799d20bfb44499333b7a9a30"
+    },
+    {
+      "path": "tests/test_mitbih_final_reporting.py",
+      "bytes": 2404,
+      "sha256": "ce9d3f90d0b864e9ab2b4a191916a34826837e9f870381f4eb1fc8f1a88688d4"
+    },
+    {
+      "path": "tests/test_mitbih_final_test.py",
+      "bytes": 4010,
+      "sha256": "589dfb07fde18e4506724658bd51b6e471789fc5d831a7074174ae6bbcb6f2d7"
+    },
+    {
+      "path": "tests/test_mitbih_full_run.py",
+      "bytes": 3185,
+      "sha256": "c1b71bbb6303231d81ba62cea1e251f7590d323375a2c5e0210fc5a91ef96deb"
+    },
+    {
+      "path": "tests/test_mitbih_holdout_guard.py",
+      "bytes": 851,
+      "sha256": "3fec802b538c00a98028159004243fbb1b775276bfd3ffc891fb4f3c466b2a9f"
+    },
+    {
+      "path": "tests/test_mitbih_reduced_f_training.py",
+      "bytes": 3514,
+      "sha256": "99a889997f83bf2e562d047947e44dc472295bf93edb2d2d09939d58643845bf"
+    },
+    {
+      "path": "tests/test_mitbih_rr.py",
+      "bytes": 10505,
+      "sha256": "30287ed6cc07cc22dca96fd0cc91445f91d065383ec9479e17dcc03965e8df84"
+    },
+    {
+      "path": "tests/test_mitbih_setup.py",
+      "bytes": 11944,
+      "sha256": "4fc6881b96d4d80a6fe966e49c75068a253aa8f93fcdb73a83bfcc79be2e4bfa"
+    },
+    {
+      "path": "tests/test_mitbih_training.py",
+      "bytes": 9549,
+      "sha256": "d5e8810f05343f9d8fd19d59c6e0477d78b7da4da2298f57795b962de7b748ad"
+    },
+    {
+      "path": "tests/test_mitbih_unweighted.py",
+      "bytes": 4708,
+      "sha256": "d32d96f14986fcc8d5918e1a376a8f0cc0317f1b565592fff84a063f0360e68a"
+    },
+    {
+      "path": "tests/test_normalization.py",
+      "bytes": 7104,
+      "sha256": "595a8f4277f4e1ec66da3e8588696b35cd1d0a79edb1f0de2e78f02bf146c00b"
+    },
+    {
+      "path": "tests/test_phase26_lock.py",
+      "bytes": 880,
+      "sha256": "691169392aad86a2000f05c5bc50cc24b3e8dd956d82561fd58442399c4e651e"
+    },
+    {
+      "path": "tests/test_prepare_dataset.py",
+      "bytes": 7662,
+      "sha256": "1dd5baa251db792ee6d346b965482f6345e99247d77efa5ef229c0d18f2418b0"
+    },
+    {
+      "path": "tests/test_preprocessing.py",
+      "bytes": 5734,
+      "sha256": "6b920add67aa1fdb62b2efcdda3b39fa3ff8b38705b005a4da697e471e8a2e30"
+    },
+    {
+      "path": "tests/test_preprocessing_comparison.py",
+      "bytes": 6523,
+      "sha256": "4344b07cde6110230b7a07b447ac6e768256877cba2dd0f40bbb0c613cb943b4"
+    },
+    {
+      "path": "tests/test_ptbxl_bulk.py",
+      "bytes": 14052,
+      "sha256": "7406e5c07587a4f2e7a19d9807a30b3bf9d3df9af562f34f5591ba9c7c7c9d38"
+    },
+    {
+      "path": "tests/test_ptbxl_decisions.py",
+      "bytes": 6449,
+      "sha256": "dbc2b6cdb7d7d75a94d3aa7d983835f026b2c6ccee272a58d6c70475b98dbc8a"
+    },
+    {
+      "path": "tests/test_ptbxl_final_evaluation.py",
+      "bytes": 4828,
+      "sha256": "1ec990edcb95ed22f626d4c0223f018bd4032a2f6ae696ff3dcc0486cefe58c8"
+    },
+    {
+      "path": "tests/test_ptbxl_full_run.py",
+      "bytes": 2636,
+      "sha256": "3ad2b91e16f878e4f74012dda35b935e1515e4d0e84cf3e43691653bbb13dcd4"
+    },
+    {
+      "path": "tests/test_ptbxl_metadata.py",
+      "bytes": 8427,
+      "sha256": "01347635b6ebdcba25f9a2603ce247e319bcbb7e85c91aebf629297812b8562e"
+    },
+    {
+      "path": "tests/test_ptbxl_metrics.py",
+      "bytes": 2324,
+      "sha256": "123ca2e93a064339334af60ec8d3a60edcf6cb590f6734dc4e3dfee9f1df944c"
+    },
+    {
+      "path": "tests/test_ptbxl_optimization.py",
+      "bytes": 5721,
+      "sha256": "e35d70e49a9e991457b692a642a31f0fb87b14d8abffa447db933eabc4aad5e9"
+    },
+    {
+      "path": "tests/test_ptbxl_protocol.py",
+      "bytes": 8095,
+      "sha256": "dca4c9c086e4f82b6e774f5d2e5158ac8ba56f571c58257d8f62e0e0251abf50"
+    },
+    {
+      "path": "tests/test_ptbxl_readiness.py",
+      "bytes": 8270,
+      "sha256": "5575a92f0033d4ef73ded491bf0bc707d3d7037e92a285ea582bcbd872c7086d"
+    },
+    {
+      "path": "tests/test_ptbxl_rhythm.py",
+      "bytes": 10000,
+      "sha256": "4f9aaf8cf83948a2311e8e0441f4d2f679996ce1537ff50ecce55bd71a0d4504"
+    },
+    {
+      "path": "tests/test_ptbxl_torch.py",
+      "bytes": 3071,
+      "sha256": "ae54230eef4640d7ae6b03151fd10e66986f49a27d778ba28d02f7c18e8cb26b"
+    },
+    {
+      "path": "tests/test_ptbxl_training.py",
+      "bytes": 10281,
+      "sha256": "85f2bb208e6a23590e3440d68468fe763c73bbbf8a162be635bf7cf6fbc5c863"
+    },
+    {
+      "path": "tests/test_publication_handoff.py",
+      "bytes": 4718,
+      "sha256": "994fbd8afa9f87515680faf373b83838fec4c3d7c4ac346e4731aeb6764eff69"
+    },
+    {
+      "path": "tests/test_rhythm_audit.py",
+      "bytes": 6319,
+      "sha256": "35289ec89de34b7813a7e56f2ac2db172d3366f665a3b9177a7187114e5e5845"
+    },
+    {
+      "path": "tests/test_segmentation.py",
+      "bytes": 8092,
+      "sha256": "28d369724e2be092fceb1d1172712109690f9b1c482a2b3fc93219724d9c0438"
+    },
+    {
+      "path": "tests/test_visualization.py",
+      "bytes": 1367,
+      "sha256": "86d8a843f7bd7ac9d306a2262e8b69ae76b31e3441f4a56cb87793b9f0fe9d11"
+    }
+  ],
+  "untrack_local_only": [
+    "data/ptbxl/.gitignore",
+    "data/ptbxl/metadata/ptbxl_database.csv",
+    "data/ptbxl/metadata/scp_statements.csv",
+    "PTBXL_DOWNLOAD_MANIFEST.json",
+    "PTBXL_PILOT_MANIFEST.json"
+  ],
+  "policy": "Code, tests, configuration and aggregate technical reports only; no datasets, waveform/NPZ, checkpoints, original clinical metadata, secrets, caches or patient prediction rows",
+  "publication_status": "Prepared and audited locally; actual staging/commit/push not yet performed",
+  "publication_strategy": "Feature branch only; main ahead is expected and not merged; reject divergent remote feature; reuse exact existing commit",
+  "reviewed_remote_main": {
+    "commit": "a2fe7c589743321f28b47706fdf0529174ba5222",
+    "commits_ahead_of_base": 16,
+    "exact_changed_path_overlap": [
+      ".gitignore"
+    ],
+    "remote_code_modified": false
+  }
+}

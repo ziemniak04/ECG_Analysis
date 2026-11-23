@@ -1,0 +1,19 @@
+{
+  "version": "ptbxl-rhythm-cnn-v1",
+  "input_channels": 12,
+  "sequence_length": 1000,
+  "num_classes": 4,
+  "channels": [
+    32,
+    64,
+    128
+  ],
+  "kernels": [
+    15,
+    9,
+    5
+  ],
+  "pool_size": 2,
+  "head_features": 64,
+  "dropout": 0.3
+}

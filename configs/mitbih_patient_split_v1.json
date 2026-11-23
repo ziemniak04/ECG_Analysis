@@ -1,0 +1,221 @@
+{
+  "candidate_count": 20000,
+  "class_names": [
+    "N",
+    "S",
+    "V",
+    "F",
+    "Q"
+  ],
+  "feasible_candidates": 5197,
+  "groups": {
+    "test": [
+      "mitdb_group_112",
+      "mitdb_group_203",
+      "mitdb_group_207",
+      "mitdb_group_209",
+      "mitdb_group_212",
+      "mitdb_group_213",
+      "mitdb_group_217",
+      "mitdb_group_228",
+      "mitdb_group_234"
+    ],
+    "train": [
+      "mitdb_group_100",
+      "mitdb_group_101",
+      "mitdb_group_102",
+      "mitdb_group_103",
+      "mitdb_group_106",
+      "mitdb_group_107",
+      "mitdb_group_108",
+      "mitdb_group_109",
+      "mitdb_group_111",
+      "mitdb_group_113",
+      "mitdb_group_114",
+      "mitdb_group_115",
+      "mitdb_group_116",
+      "mitdb_group_117",
+      "mitdb_group_118",
+      "mitdb_group_122",
+      "mitdb_group_123",
+      "mitdb_group_124",
+      "mitdb_group_200",
+      "mitdb_group_208",
+      "mitdb_group_214",
+      "mitdb_group_215",
+      "mitdb_group_219",
+      "mitdb_group_220",
+      "mitdb_group_221",
+      "mitdb_group_230",
+      "mitdb_group_231",
+      "mitdb_group_232",
+      "mitdb_group_233"
+    ],
+    "validation": [
+      "mitdb_group_104",
+      "mitdb_group_105",
+      "mitdb_group_119",
+      "mitdb_group_121",
+      "mitdb_group_201_202",
+      "mitdb_group_205",
+      "mitdb_group_210",
+      "mitdb_group_222",
+      "mitdb_group_223"
+    ]
+  },
+  "manifest_sha256": "1121d2ccc825624cbb5e91906347ae6551e0feb63df88c6cc185adeffb5105c4",
+  "method": "Count-metadata-only constrained group allocation; no waveform/model optimization",
+  "minimum_class_supporting_groups": [
+    3,
+    3,
+    3,
+    2,
+    2
+  ],
+  "nominal_beat_fractions": [
+    0.6,
+    0.2,
+    0.2
+  ],
+  "objective": 0.10989079365332981,
+  "patient_identity_scope": "technical dataset groups, not real patient identities",
+  "rare_class_anchors": {
+    "test": [
+      "mitdb_group_213",
+      "mitdb_group_217"
+    ],
+    "train": [
+      "mitdb_group_102",
+      "mitdb_group_107",
+      "mitdb_group_208",
+      "mitdb_group_232",
+      "mitdb_group_233"
+    ],
+    "validation": [
+      "mitdb_group_104",
+      "mitdb_group_205",
+      "mitdb_group_223"
+    ]
+  },
+  "schema": "mitbih-patient-split-v1",
+  "seed": 42,
+  "summary": {
+    "test": {
+      "beats": 23392,
+      "class_counts": {
+        "F": 363,
+        "N": 19246,
+        "Q": 1806,
+        "S": 575,
+        "V": 1402
+      },
+      "group_count": 9,
+      "record_count": 9,
+      "record_ids": [
+        "112",
+        "203",
+        "207",
+        "209",
+        "212",
+        "213",
+        "217",
+        "228",
+        "234"
+      ],
+      "supporting_groups": {
+        "F": 2,
+        "N": 9,
+        "Q": 2,
+        "S": 7,
+        "V": 7
+      }
+    },
+    "train": {
+      "beats": 62926,
+      "class_counts": {
+        "F": 401,
+        "N": 52254,
+        "Q": 4167,
+        "S": 1715,
+        "V": 4389
+      },
+      "group_count": 29,
+      "record_count": 29,
+      "record_ids": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "106",
+        "107",
+        "108",
+        "109",
+        "111",
+        "113",
+        "114",
+        "115",
+        "116",
+        "117",
+        "118",
+        "122",
+        "123",
+        "124",
+        "200",
+        "208",
+        "214",
+        "215",
+        "219",
+        "220",
+        "221",
+        "230",
+        "231",
+        "232",
+        "233"
+      ],
+      "supporting_groups": {
+        "F": 10,
+        "N": 28,
+        "Q": 5,
+        "S": 18,
+        "V": 21
+      }
+    },
+    "validation": {
+      "beats": 23134,
+      "class_counts": {
+        "F": 38,
+        "N": 19094,
+        "Q": 2067,
+        "S": 491,
+        "V": 1444
+      },
+      "group_count": 9,
+      "record_count": 10,
+      "record_ids": [
+        "104",
+        "105",
+        "119",
+        "121",
+        "201",
+        "202",
+        "205",
+        "210",
+        "222",
+        "223"
+      ],
+      "supporting_groups": {
+        "F": 4,
+        "N": 9,
+        "Q": 2,
+        "S": 6,
+        "V": 8
+      }
+    }
+  },
+  "target_group_counts": {
+    "test": 9,
+    "train": 29,
+    "validation": 9
+  },
+  "test_status": "locked; no model evaluation in Phase 20"
+}

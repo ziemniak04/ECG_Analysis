@@ -1,0 +1,22 @@
+{
+  "ptbxl_final_test": {
+    "local_source": "results/model_evaluation/phase19_final_test/run_001/test_metrics.json",
+    "source_sha256": "4526b35fae7994556590ad199f90835604022707995d618dc1f5e8b88731175c",
+    "publication": "Aggregate metrics only; no patient rows, signals, predictions or raw metadata"
+  },
+  "mitbih_final_test": {
+    "local_source": "results/model_evaluation/phase26_mitbih_final_test/run_001/final_test_metrics.json",
+    "source_sha256": "9c8f916d9ada1cbc9cd1d76cd71d15699bf2c1c2849213fde6d84345945becaf",
+    "publication": "Aggregate metrics only; no patient rows, signals, predictions or raw metadata"
+  },
+  "mitbih_phase24b_validation": {
+    "local_source": "results/model_training/phase24b_mitbih_cnn_rr/run_001/comparison/CNN_RR_metrics.json",
+    "source_sha256": "f2a58641c3ec0dba1b821f523d891d6ddf1a6fb6cfc8d11f4bbd1ee15767fee2",
+    "publication": "Aggregate metrics only; no patient rows, signals, predictions or raw metadata"
+  },
+  "mitbih_phase25b_validation": {
+    "local_source": "results/model_training/phase25b_reduced_f/run_001/comparison/Phase25B_Fhalf_CNN_RR_metrics.json",
+    "source_sha256": "a62499733bb4be651f6a99c80c48be139197d96aabcdb8d56ebae7d2d4d9e3e8",
+    "publication": "Aggregate metrics only; no patient rows, signals, predictions or raw metadata"
+  }
+}

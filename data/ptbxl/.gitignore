@@ -1,3 +1,0 @@
-# Raw waveforms and resumable staging must stay out of Git.
-/records100/
-/.phase14_staging/

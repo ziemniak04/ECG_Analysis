@@ -1,0 +1,118 @@
+{
+  "accuracy": 0.8299904901876026,
+  "macro_f1": 0.4862942145756716,
+  "macro_auprc": 0.5991489332803646,
+  "confusion_matrix": [
+    [
+      17184,
+      439,
+      312,
+      1155,
+      4
+    ],
+    [
+      70,
+      259,
+      138,
+      24,
+      0
+    ],
+    [
+      53,
+      2,
+      1333,
+      56,
+      0
+    ],
+    [
+      25,
+      0,
+      7,
+      6,
+      0
+    ],
+    [
+      1276,
+      3,
+      368,
+      1,
+      419
+    ]
+  ],
+  "confusion_matrix_axes": "rows=true, columns=predicted; N,S,V,F,Q",
+  "auprc_definition": "Non-interpolated one-vs-rest average precision; tied scores grouped",
+  "per_class": [
+    {
+      "auprc": 0.9703150319604161,
+      "class_index": 0,
+      "class_name": "N",
+      "f1": 0.9115696780011671,
+      "fn": 1910,
+      "fp": 1424,
+      "precision": 0.9234737747205503,
+      "recall": 0.8999685765161831,
+      "specificity": 0.6475247524752475,
+      "support": 19094,
+      "tn": 2616,
+      "tp": 17184
+    },
+    {
+      "auprc": 0.41752361390225085,
+      "class_index": 1,
+      "class_name": "S",
+      "f1": 0.4338358458961474,
+      "fn": 232,
+      "fp": 444,
+      "precision": 0.3684210526315789,
+      "recall": 0.5274949083503055,
+      "specificity": 0.980391290906682,
+      "support": 491,
+      "tn": 22199,
+      "tp": 259
+    },
+    {
+      "auprc": 0.8206546881541799,
+      "class_index": 2,
+      "class_name": "V",
+      "f1": 0.7401443642420877,
+      "fn": 111,
+      "fp": 825,
+      "precision": 0.6177015755329008,
+      "recall": 0.9231301939058172,
+      "specificity": 0.9619640387275242,
+      "support": 1444,
+      "tn": 20865,
+      "tp": 1333
+    },
+    {
+      "auprc": 0.0035666215222078324,
+      "class_index": 3,
+      "class_name": "F",
+      "f1": 0.009375,
+      "fn": 32,
+      "fp": 1236,
+      "precision": 0.004830917874396135,
+      "recall": 0.15789473684210525,
+      "specificity": 0.9464842396951854,
+      "support": 38,
+      "tn": 21860,
+      "tp": 6
+    },
+    {
+      "auprc": 0.7836847108627683,
+      "class_index": 4,
+      "class_name": "Q",
+      "f1": 0.3365461847389558,
+      "fn": 1648,
+      "fp": 4,
+      "precision": 0.9905437352245863,
+      "recall": 0.2027092404450895,
+      "specificity": 0.9998101295865571,
+      "support": 2067,
+      "tn": 21063,
+      "tp": 419
+    }
+  ],
+  "beat_count": 23134,
+  "scope": "Frozen full validation; not final-test performance"
+}

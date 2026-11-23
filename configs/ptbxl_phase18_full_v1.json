@@ -1,0 +1,17 @@
+{
+  "batch_size": 16,
+  "class_weighted_loss": true,
+  "cpu_threads": 2,
+  "device": "cpu",
+  "epochs": 15,
+  "learning_rate": 0.001,
+  "max_train_batches": null,
+  "max_validation_batches": null,
+  "min_delta": 0.0,
+  "mode": "full",
+  "num_workers": 0,
+  "patience": 4,
+  "seed": 42,
+  "train_per_class": null,
+  "validation_per_class": null
+}

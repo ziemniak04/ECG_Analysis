@@ -1,0 +1,14 @@
+# Plan fazy 18 — pełny trening PTB-XL (bez wykonania)
+
+Faza 17 była małym technicznym baseline: 128 ECG treningowych i 64 walidacyjne, 2 epoki. Nie należy traktować jej metryk jako pełnej skuteczności. Faza 18 wymaga osobnego polecenia użytkowniczki; nie została rozpoczęta.
+
+1. Zamrozić manifest ukończonego eksportu, konfigurację Phase-16 CNN, wersje zależności, seed, urządzenie i kod. Potwierdzić ponownie 15689 train (foldy 1–8) oraz 1958 validation (fold 9) i separację pacjentów. Fold 10 pozostawić całkowicie poza doborem modelu.
+2. Zaplanować budżet CPU/GPU i wykonać pomiar kosztu epoki bez korzystania z testu. Dla GPU najpierw rzeczywista weryfikacja kompatybilności i deterministycznych operacji. Nie zakładać, że krótki pomiar czasu forward przewiduje całkowity czas treningu z I/O.
+3. Przygotować nową konfigurację `mode="full"`, train_per_class=null, validation_per_class=null, max_train_batches=null, max_validation_batches=null. Ustalić z góry limit epok i patience/min_delta. Domyślna konfiguracja fazy 17 pozostaje bez zmian. Trening pełny od nowej inicjalizacji zapewni jasno określony eksperyment; nie traktować krótkiego baseline jako pretrained modelu bez jawnej decyzji.
+4. Rozważyć opcjonalne class weights wyłącznie z całych foldów treningowych 1–8. Nie przenosić równo licznego składu baseline na pełną kohortę. Jeśli porównywać warianty ważone/nieważone, z góry określić ograniczony protokół wyboru na walidacji; nie oglądać testu. Bez oversamplingu całej bazy i bez modyfikowania eksportów.
+5. Użyć istniejącego pipeline z Adam i CrossEntropyLoss na logitach, pełnego val w eval/inference_mode i wyboru checkpointu po validation Macro F1. Sprawdzić wszystkie klasy w walidacji. Zapisywać loss, accuracy, recall/specificity/precision/F1, AP/macro AP, CM i czasy, wraz z undefined wartościami i faktycznymi liczebnościami.
+6. Nowy wersjonowany katalog wyników, bez nadpisania fazy 17. Zachować checkpointy epok, najlepszy model, Adam/RNG, konfigurację i SHA256. Przetestować wznowienie ukończonej epoki do nowego katalogu. Wyniki różnych seedów są osobnymi eksperymentami, nie ukrytym wybieraniem najlepszego testu.
+7. Przed końcową oceną zamrozić architekturę, hiperparametry, wybraną epokę, ewentualne progi i kalibrację, wykorzystując wyłącznie trening/walidację. Dopiero odrębnie zatwierdzona końcowa ewaluacja może użyć fold 10 — bez późniejszego strojenia na jego wynikach.
+8. Raportować odrębność klas beat-level MIT-BIH i record-level PTB-XL, ograniczenia per-record Z-score, etykiet SCP i kohorty exclusive-label. Nie deklarować klinicznej skuteczności. Anna otrzyma później zamrożony interfejs modelu dla Streamlit; aplikacji ani MIT-BIH CNN nie wdrażać w tym treningu.
+
+Kod pełnej ścieżki istnieje w src/ptbxl_training.py, ale CLI wymaga jawnego --allow-full-training i nowej konfiguracji. Ten dokument jest planem, nie poleceniem uruchomienia. Rzeczywiste wyniki fazy 17: PHASE17_TRAINING_REPORT.md.
