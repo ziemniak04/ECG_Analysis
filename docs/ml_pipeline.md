@@ -9,15 +9,30 @@
 ![Plotly](https://img.shields.io/badge/Plotly-Charts-BE123C?style=flat&logo=plotly&logoColor=white&labelColor=1F2937)
 ![WFDB](https://img.shields.io/badge/WFDB-ECG_Signals-9F1239?style=flat&labelColor=1F2937)
 
-Notes for the modelling part of the project (1D-CNN models, training, metrics, Streamlit app).  
-The preprocessing and the data export are described in `README_preprocessing.md` and `ECG_DATA_HANDOFF_FOR_ANNA.md` in the repo root. This file only covers what was added on top of that.
-
 ---
 
 [1. Setup](#1-setup-windows-powershell) · [2. Getting the data](#2-getting-the-data) · [3. Loading & splits](#3-loading-the-data-and-the-splits-srcmldatapy) · [4. Models & training](#4-models-and-training) · [5. Evaluation](#5-evaluation-and-threshold-tuning-srcmlevaluatepy)  
 [6. Results](#6-results-and-interpretation) · [7. Known issues](#7-known-issues-and-decisions) · [8. Streamlit app](#8-streamlit-app-streamlit_apppy) · [9. Full pipeline](#9-full-pipeline-order-of-commands) · [10. Commits](#10-commit-style)
 
 </div>
+
+---
+
+### Scope & contributor
+
+Notes for the modelling part of the project (1D-CNN models, training, metrics, Streamlit app). The preprocessing and the data export are described in `README_preprocessing.md` and `ECG_DATA_HANDOFF_FOR_ANNA.md` in the repo root; this document covers the ML pipeline built on top of that.
+
+<table>
+  <tr>
+    <td align="center" valign="middle">
+      <a href="https://github.com/BinaryWiz4rd"><img src="https://avatars.githubusercontent.com/u/164073863?v=4" width="44" height="44" alt="Anna"></a>
+    </td>
+    <td valign="middle">
+      <b>Anna</b> (@BinaryWiz4rd)<br>
+      <sub>ML modelling, evaluation &amp; Streamlit app</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
