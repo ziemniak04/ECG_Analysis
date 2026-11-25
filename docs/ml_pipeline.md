@@ -150,36 +150,24 @@ Files: `src/ml/models.py` (model), `src/ml/train.py` (training loop).
 
 ### ML codebase overview
 
-<div align="center">
-
 ```mermaid
-flowchart TD
-    classDef stage fill:#fff1f2,stroke:#be123c,stroke-width:1.5px,color:#881337
-    classDef artifact fill:#f8fafc,stroke:#475569,stroke-width:1.5px,color:#0f172a
+%%{init: {'theme': 'neutral'}}%%
+flowchart LR
+    A(["data/processed/\nshards"]) --> B("src/ml/data.py\ncache & patient splits")
+    B --> C("src/ml/split_report.py\nper-patient counts")
 
-    subgraph data_prep["1. Data loading & patient splits"]
-        shards["data/processed/<br/>ecg_dataset_v1 & ptbxl_rhythm_v1"]:::artifact --> data_mod["src/ml/data.py<br/>cache (.npz) & patient-level splits"]:::stage
-        data_mod --> split_rep["src/ml/split_report.py<br/>class counts per patient"]:::stage
-    end
+    B --> D("src/ml/train.py\nECGNet + RR features")
+    E("src/ml/models.py\n1D ResNet") --> D
+    D --> F(["models/*.pt\nweights & scaler"])
 
-    subgraph train_eval["2. Training & calibration"]
-        data_mod --> train_mod["src/ml/train.py<br/>WeightedFocalLoss & RR features"]:::stage
-        models_mod["src/ml/models.py<br/>ECGNet (1D ResNet + RR branch)"]:::stage --> train_mod
-        train_mod --> ckpt["models/*.pt<br/>weights, RR scaler & history"]:::artifact
-        ckpt --> eval_mod["src/ml/evaluate.py<br/>val threshold tuning & holdout test"]:::stage
-        eval_mod --> metrics["results/ml/<br/>*_metrics.json & *_thresholds.json"]:::artifact
-    end
+    F --> G("src/ml/evaluate.py\nval thresholds & test")
+    G --> H(["results/ml/\nmetrics & thresholds"])
 
-    subgraph app_layer["3. Inference & Streamlit viewer"]
-        raw_in["uploaded WFDB / CSV<br/>or local record"]:::artifact --> inf_mod["src/ml/inference.py<br/>filter, z-score, XQRS R-peaks"]:::stage
-        ckpt --> inf_mod
-        metrics --> inf_mod
-        inf_mod --> viewer_mod["src/ml/viewer.py<br/>overview, detail plots & tables"]:::stage
-        viewer_mod --> st_app["streamlit_app.py<br/>interactive browser UI"]:::stage
-    end
+    F --> I("src/ml/inference.py\nfilter, z-score, XQRS")
+    H --> I
+    I --> J("src/ml/viewer.py\nPlotly charts & tables")
+    J --> K(["streamlit_app.py\nbrowser UI"])
 ```
-
-</div>
 
 ### Architecture (`ECGNet`)
 
