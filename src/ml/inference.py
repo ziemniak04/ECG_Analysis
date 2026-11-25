@@ -228,6 +228,8 @@ def classify_rhythm(loaded, filtered):
     for w in range(n_windows):
         part = filtered[w * RHYTHM_WINDOW:(w + 1) * RHYTHM_WINDOW]
         z = normalize_ecg(part, "zscore", scope="recording", source_ids=["window"])
+        if not np.isfinite(z).all():
+            raise ValueError(f"10 s window starting at {w * 10} s contains a flatline or NaN.")        
         X.append(np.ascontiguousarray(z.T, dtype=np.float32))
     X = np.stack(X)
     proba = _predict(loaded, X, np.zeros((len(X), 0), dtype=np.float32))
