@@ -1,13 +1,27 @@
-"""Everything the Streamlit app needs to run the models on a new recording.
+"""Inference pipeline for the Streamlit ECG viewer.
 
-No streamlit in here, so it can be tested on its own. The preprocessing has to
-be the same as in training (preprocessing code is reused for that):
-  1. filter the whole recording (high-pass 0.5 Hz, low-pass 45 Hz, order 4, zero-phase, no notch)
-  2. z-score every lead
-  3. MIT-BIH: cut a window of 90 samples before / 162 after every R-peak
-     PTB-XL:   cut 10 s windows (1000 samples at 100 Hz)
+Reuses the exact filtering and z-score standardization functions from training
+to prevent training-serving feature skew.
+
+References
+----------
+.. [1] Sculley, D., Holt, G., Golovin, D., Davydov, E., Phillips, T., Ebner, D.,
+       Chaudhary, V., Young, M., Crespo, J. F., & Dennison, D. (2015).
+       Hidden technical debt in machine learning systems. Advances in Neural
+       Information Processing Systems (NeurIPS), 28.
+       Access: https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html
+.. [2] Strodthoff, N., Wagner, P., Schaeffter, T., & Samek, W. (2020).
+       Deep learning for ECG analysis: Benchmarks and insights from PTB-XL.
+       IEEE Journal of Biomedical and Health Informatics, 25(5), 1519-1528.
+       Access: https://arxiv.org/abs/2004.13701
+
+       I took the first articles advice of "reusing the exact preprocessing functions from training" to avoid
+       training-serving skew. And the second one I used to get the idea of how to preprocess the PTB-XL data,
+       and also to get the lead names and the rhythm classes.
 """
+
 import io
+import json
 import tempfile
 from dataclasses import dataclass
 from fractions import Fraction
@@ -20,18 +34,22 @@ import wfdb
 from scipy.signal import resample_poly
 from wfdb import processing
 
+from functools import lru_cache
+
 from src.ml.data import CACHE_DIR, MITBIH_CLASSES, PTBXL_CLASSES, ROOT, rr_features
+from src.ml.evaluate import apply_thresholds, validate_checkpoint
 from src.ml.models import ECGNet
 from src.preprocessing import filter_ecg, normalize_ecg
 
 MODELS_DIR = ROOT / "models"
+RESULTS_DIR = ROOT / "results" / "ml"
 MITBIH_FS = 360
 PTBXL_FS = 100
-BEFORE, AFTER = 90, 162          # samples around the R-peak (0.25 s / 0.45 s at 360 Hz)
-RHYTHM_WINDOW = 1000             # 10 s at 100 Hz
+BEFORE, AFTER = 90, 162
+RHYTHM_WINDOW = 1000
 PTBXL_LEADS = ("I", "II", "III", "AVR", "AVL", "AVF", "V1", "V2", "V3", "V4", "V5", "V6")
 
-# models
+
 @dataclass
 class LoadedModel:
     name: str
@@ -42,27 +60,51 @@ class LoadedModel:
     extra_std: np.ndarray
     epoch: int
     in_channels: int
+    thresholds: np.ndarray | None = None
+
 
 def load_model(name):
-    ckpt = torch.load(MODELS_DIR / f"{name}.pt", map_location="cpu")
-    n_extra = ckpt.get("n_extra", 0)  # old checkpoints have no RR features
+    ckpt = torch.load(MODELS_DIR / f"{name}.pt", map_location="cpu", weights_only=False)
+    validate_checkpoint(ckpt)
+    n_extra = ckpt.get("n_extra", 0)
+    class_names = list(ckpt["class_names"])
     model = ECGNet(ckpt["in_channels"], ckpt["n_classes"], n_extra=n_extra)
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
-    return LoadedModel(name, model, list(ckpt["class_names"]), n_extra,
-                       np.array(ckpt.get("extra_mean", []), dtype=np.float32),
-                       np.array(ckpt.get("extra_std", []), dtype=np.float32),
-                       int(ckpt["epoch"]), int(ckpt["in_channels"]))
+
+    thresholds = None
+    if ckpt.get("thresholds") is not None:
+        thresholds = np.array(ckpt["thresholds"], dtype=np.float32)
+    else:
+        th_path = RESULTS_DIR / f"{name}_thresholds.json"
+        if th_path.is_file():
+            saved = json.loads(th_path.read_text())
+            thresholds = np.array([saved[c] for c in class_names], dtype=np.float32)
+
+    return LoadedModel(
+        name,
+        model,
+        class_names,
+        n_extra,
+        np.array(ckpt.get("extra_mean", []), dtype=np.float32),
+        np.array(ckpt.get("extra_std", []), dtype=np.float32),
+        int(ckpt["epoch"]),
+        int(ckpt["in_channels"]),
+        thresholds,
+    )
+
 
 def list_models():
-    # {"mitbih": 2, "mitbih_rr": 2, "ptbxl": 12} -> name: number of input leads
     found = {}
     for path in sorted(MODELS_DIR.glob("*.pt")):
         try:
-            found[path.stem] = int(torch.load(path, map_location="cpu")["in_channels"])
+            ckpt = torch.load(path, map_location="cpu", weights_only=False)
+            validate_checkpoint(ckpt)
+            found[path.stem] = int(ckpt["in_channels"])
         except Exception:
-            pass  # not one of our checkpoints
+            pass
     return found
+
 
 def _predict(loaded, X, extra, batch_size=512):
     out = []
@@ -73,23 +115,25 @@ def _predict(loaded, X, extra, batch_size=512):
             out.append(torch.softmax(loaded.model(xb, eb), dim=1).numpy())
     return np.concatenate(out)
 
-# reading files
+
 def _rec_to_dict(rec, source):
     if rec.p_signal is None:
         raise ValueError("The record has no physical signal")
-    return {"signal": np.asarray(rec.p_signal, dtype=np.float64), "fs": float(rec.fs),
-            "names": list(rec.sig_name), "source": source}
+    sig = np.asarray(rec.p_signal, dtype=np.float64)
+    if not np.isfinite(sig).all():
+        raise ValueError("The recording contains NaN or infinite signal values")
+    return {"signal": sig, "fs": float(rec.fs), "names": list(rec.sig_name), "source": source}
+
 
 def read_wfdb_path(path):
-    """A record on disk, path with or without the .hea ending."""
     path = Path(path).with_suffix("")
     return _rec_to_dict(wfdb.rdrecord(str(path)), path.name)
 
+
 def read_wfdb_files(files):
-    """files: {file name: bytes}. Needs the .hea and the .dat of ONE record."""
     with tempfile.TemporaryDirectory() as tmp:
         for name, data in files.items():
-            (Path(tmp) / Path(name).name).write_bytes(data)  # Path(...).name drops any folders
+            (Path(tmp) / Path(name).name).write_bytes(data)
         headers = sorted(Path(tmp).glob("*.hea"))
         if len(headers) != 1:
             raise ValueError("Upload exactly one .hea file together with its .dat file")
@@ -99,13 +143,12 @@ def read_wfdb_files(files):
             raise ValueError(f"Could not read the record, is the .dat file missing? ({e})")
         return _rec_to_dict(rec, headers[0].stem)
 
+
 def read_csv_file(data, name="uploaded.csv"):
-    """Columns = leads, rows = samples. A time/index column is dropped if it has a typical name."""
     try:
         df = pd.read_csv(io.BytesIO(data), sep=None, engine="python")
     except Exception as e:
         raise ValueError(f"Could not read the csv file ({e})")
-    # no header: the first row is numbers, pandas then took it as column names
     try:
         [float(c) for c in df.columns]
         df = pd.read_csv(io.BytesIO(data), sep=None, engine="python", header=None)
@@ -120,8 +163,8 @@ def read_csv_file(data, name="uploaded.csv"):
         raise ValueError(f"The csv contains {int(df.isna().sum().sum())} empty or non-numeric values")
     return {"signal": df.to_numpy(dtype=np.float64), "fs": None, "names": names, "source": Path(name).stem}
 
+
 def order_leads(signal, names):
-    """Put the 12 leads in the order used in training. Returns (signal, note)."""
     if names is None:
         if signal.shape[1] != 12:
             raise ValueError(f"The rhythm model needs 12 leads, the file has {signal.shape[1]}")
@@ -134,32 +177,36 @@ def order_leads(signal, names):
     order = [upper.index(l) for l in PTBXL_LEADS]
     return signal[:, order], "The leads were in a different order and have been reordered."
 
+
 def resample(signal, fs_in, fs_out):
     if abs(fs_in - fs_out) < 1e-9:
         return signal
     ratio = Fraction(fs_out / fs_in).limit_denominator(1000)
     return resample_poly(signal, ratio.numerator, ratio.denominator, axis=0)
 
-# preprocessing
+
 def prepare(signal, fs):
-    """Same as in training: filter the whole recording, then z-score per lead."""
+    if not np.isfinite(signal).all():
+        raise ValueError("Signal contains NaN or infinite values.")
+    if np.any(np.std(signal, axis=0) < 1e-6):
+        raise ValueError("One or more leads appear to be flatlined (zero variance).")
     filtered = filter_ecg(signal, fs)
     normalized = normalize_ecg(filtered, "zscore", scope="recording", source_ids=["upload"])
     return filtered, normalized
 
-# beat model
+
 def detect_peaks(normalized, fs=MITBIH_FS):
-    # xqrs finds the QRS complexes, then every peak is moved to the local extreme
     lead = normalized[:, 0]
     peaks = processing.xqrs_detect(lead, fs, verbose=False)
     if len(peaks) < 3:
         raise ValueError("Fewer than 3 heartbeats found, the recording is too short or too noisy")
-    peaks = processing.correct_peaks(lead, np.asarray(peaks), search_radius=int(0.05 * fs),
-                                     smooth_window_size=int(0.02 * fs))
+    peaks = processing.correct_peaks(
+        lead, np.asarray(peaks), search_radius=int(0.05 * fs), smooth_window_size=int(0.02 * fs)
+    )
     return np.unique(np.asarray(peaks, dtype=np.int64))
 
+
 def classify_beats(loaded, normalized, peaks):
-    # RR features use ALL detected beats, only then the beats too close to the edge are dropped
     if loaded.n_extra:
         extra = rr_features(peaks, np.zeros(len(peaks)), MITBIH_FS)
         extra = ((extra - loaded.extra_mean) / loaded.extra_std).astype(np.float32)
@@ -171,11 +218,11 @@ def classify_beats(loaded, normalized, peaks):
     X = np.stack([normalized[p - BEFORE:p + AFTER].T for p in peaks]).astype(np.float32)
 
     proba = _predict(loaded, X, extra)
-    return {"peaks": peaks, "proba": proba, "pred": proba.argmax(1)}
+    pred = apply_thresholds(proba, loaded.thresholds)
+    return {"peaks": peaks, "proba": proba, "pred": pred}
 
-# rhythm model
+
 def classify_rhythm(loaded, filtered):
-    """filtered: (samples, 12) at 100 Hz. Non-overlapping 10 s windows, z-score per window."""
     n_windows = len(filtered) // RHYTHM_WINDOW
     if n_windows < 1:
         raise ValueError(f"Need at least 10 s of signal at 100 Hz, got {len(filtered) / PTBXL_FS:.1f} s")
@@ -183,28 +230,39 @@ def classify_rhythm(loaded, filtered):
     for w in range(n_windows):
         part = filtered[w * RHYTHM_WINDOW:(w + 1) * RHYTHM_WINDOW]
         z = normalize_ecg(part, "zscore", scope="recording", source_ids=["window"])
+        if not np.isfinite(z).all():
+            raise ValueError(f"10 s window starting at {w * 10} s contains a flatline or NaN.")        
         X.append(np.ascontiguousarray(z.T, dtype=np.float32))
     X = np.stack(X)
     proba = _predict(loaded, X, np.zeros((len(X), 0), dtype=np.float32))
-    return {"starts": np.arange(n_windows) * RHYTHM_WINDOW, "proba": proba,
-            "pred": proba.argmax(1), "mean_proba": proba.mean(0),
-            "unused_samples": len(filtered) - n_windows * RHYTHM_WINDOW}
+    pred = apply_thresholds(proba, loaded.thresholds)
+    return {
+        "starts": np.arange(n_windows) * RHYTHM_WINDOW,
+        "proba": proba,
+        "pred": pred,
+        "mean_proba": proba.mean(0),
+        "unused_samples": len(filtered) - n_windows * RHYTHM_WINDOW,
+    }
 
 
-# which split was a local record in?
+@lru_cache(maxsize=1)
+def _mitbih_record_splits():
+    from src.ml.data import mitbih_group_split
+    with np.load(CACHE_DIR / "mitbih_v2.npz", allow_pickle=False) as f:
+        y, groups, rec = f["y"], f["groups"], f["record_ids"]
+    split = mitbih_group_split(y, groups)
+    return {part: set(rec[idx].tolist()) for part, idx in split.items()}
+
+
 def split_of_mitbih_record(record_id):
-    """'train' / 'val' / 'test' for a MIT-BIH record, or None if unknown (no cache yet)."""
     try:
-        from src.ml.data import mitbih_group_split
-        with np.load(CACHE_DIR / "mitbih_v2.npz", allow_pickle=False) as f:
-            y, groups, rec = f["y"], f["groups"], f["record_ids"]
-        split = mitbih_group_split(y, groups)
-        for part, idx in split.items():
-            if str(record_id) in set(rec[idx].tolist()):
+        for part, records in _mitbih_record_splits().items():
+            if str(record_id) in records:
                 return part
     except Exception:
         pass
     return None
+
 
 def split_of_ptbxl_ecg(ecg_id):
     try:

@@ -1,7 +1,20 @@
-"""Loading the exported ECG data and making the train/val/test splits.
+"""Loading exported ECG data and building patient-separated train/val/test splits.
 
-Run from the repo root:  python -m src.ml.data
+References
+----------
+.. [1] Wagner, P., Strodthoff, N., Bousseljot, R.-D., Kreiseler, D., Lunze, F. I.,
+       Samek, W., & Schaeffter, T. (2020). PTB-XL, a large publicly available
+       electrocardiography dataset. Scientific Data, 7(1), 154.
+       Access: https://www.nature.com/articles/s41597-020-0495-6
+       Dataset: https://physionet.org/content/ptb-xl/
+.. [2] Goldberger, A. L., Amaral, L. A., Glass, L., Hausdorff, J. M., Ivanov, P. C.,
+       Mark, R. G., Mietus, J. E., Moody, G. B., Stanley, H. E. (2000). PhysioBank, 
+       PhysioToolkit, and PhysioNet: Components of a new research resource for complex
+       physiologic signals. Circulation, 101(23), e215-e220.
+       Access: https://pubmed.ncbi.nlm.nih.gov/10851218/
+       Dataset: https://physionet.org/content/mitdb/
 """
+
 from collections import Counter
 from pathlib import Path
 

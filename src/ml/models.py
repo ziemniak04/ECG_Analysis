@@ -1,13 +1,35 @@
-"""1D-CNN with residual blocks, used for both datasets.
+"""1D Residual CNN architecture and imbalance-aware loss for ECG classification.
 
-MIT-BIH: in_channels=2,  n_classes=5  (input length 252, optionally n_extra=5 RR features)
-PTB-XL:  in_channels=12, n_classes=4  (input length 1000)
+Used for both beat-level classification:
+    (MIT-BIH: in_channels=2, n_classes=5,length=252, optional n_extra=5 RR features)
+    and rhythm-level classification (PTB-XL: in_channels=12, n_classes=4, length=1000)
+
+References
+----------
+.. [1] He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for
+       image recognition. Proceedings of the IEEE CVPR, 770-778.
+       Access: https://arxiv.org/abs/1512.03385
+.. [2] Lin, T. Y., Goyal, P., Girshick, R., He, K., & Dollár, P. (2017).
+       Focal loss for dense object detection. Proceedings of the IEEE ICCV, 2980-2988.
+       Access: https://arxiv.org/abs/1708.02002
+
+    I just want to mention that the first article even though is about image recognition,
+    but the architecture is very general and can be applied to 1D signals as well, and that
+    is where I took inspiration from.
+
+    The second article was also not about ECG classification, but it was a very good article
+    that explained the focal loss and how it can be used to deal with class imbalance, which
+    seems to be a common problem not only in ECG classification, but universally as well.
 """
+
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 
 class ResBlock(nn.Module):
+    """Residual 1D convolutional block with BatchNorm and LeakyReLU."""
+
     def __init__(self, in_ch, out_ch, stride=1, kernel=7):
         super().__init__()
         pad = kernel // 2
@@ -17,7 +39,6 @@ class ResBlock(nn.Module):
         self.bn2 = nn.BatchNorm1d(out_ch)
         self.act = nn.LeakyReLU(0.1)
 
-        # the skip connection needs a 1x1 conv when the shape changes
         if stride != 1 or in_ch != out_ch:
             self.skip = nn.Sequential(
                 nn.Conv1d(in_ch, out_ch, 1, stride=stride, bias=False),
@@ -33,8 +54,11 @@ class ResBlock(nn.Module):
 
 
 class ECGNet(nn.Module):
-    def __init__(self, in_channels, n_classes, widths=(32, 64, 128), dropout=0.4, n_extra=0):
+    """1D Residual CNN with AdaptiveAvgPool1d and optional RR-interval fusion"""
+
+    def __init__(self, in_channels, n_classes, widths=(32, 64, 128), dropout=0.4, n_extra=0, rr_dropout=0.3):
         super().__init__()
+        self.rr_dropout = rr_dropout
         self.stem = nn.Sequential(
             nn.Conv1d(in_channels, widths[0], 7, padding=3, bias=False),
             nn.BatchNorm1d(widths[0]),
@@ -44,15 +68,13 @@ class ECGNet(nn.Module):
         blocks = []
         prev = widths[0]
         for i, w in enumerate(widths):
-            # first block keeps the length, the others halve it
             blocks.append(ResBlock(prev, w, stride=1 if i == 0 else 2))
             prev = w
         self.blocks = nn.Sequential(*blocks)
 
-        # global average pooling, so the head does not care about the input length
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.head = nn.Sequential(
-            nn.Linear(prev + n_extra, 64),  # n_extra = extra features next to the CNN output
+            nn.Linear(prev + n_extra, 64),
             nn.LeakyReLU(0.1),
             nn.Dropout(dropout),
             nn.Linear(64, n_classes),
@@ -62,8 +84,27 @@ class ECGNet(nn.Module):
         x = self.blocks(self.stem(x))
         x = self.pool(x).squeeze(-1)
         if extra is not None and extra.shape[1] > 0:
+            if self.training and self.rr_dropout > 0:
+                extra = F.dropout(extra, p=self.rr_dropout, training=True)
             x = torch.cat([x, extra], dim=1)
-        return self.head(x)  # raw logits, softmax is applied outside
+        return self.head(x)
+
+
+class WeightedFocalLoss(nn.Module):
+    """focal loss with optional class weights to focus training on hard minority beats"""
+
+    def __init__(self, weight=None, gamma=1.5):
+        super().__init__()
+        self.weight = weight
+        self.gamma = gamma
+
+    def forward(self, logits, targets):
+        ce = F.cross_entropy(logits, targets, reduction="none")
+        pt = torch.exp(-ce)
+        loss = ((1.0 - pt) ** self.gamma) * ce
+        if self.weight is not None:
+            loss = self.weight[targets] * loss
+        return loss.mean()
 
 
 def count_parameters(model):

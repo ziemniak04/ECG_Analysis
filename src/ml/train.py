@@ -1,18 +1,23 @@
-"""Training loop for both datasets.
+"""Training loop for MIT-BIH beat and PTB-XL rhythm models.
 
-Examples (from the repo root):
-    python -m src.ml.train --dataset mitbih
-    python -m src.ml.train --dataset ptbxl --epochs 30
-    python -m src.ml.train --dataset mitbih --rr --name mitbih_rr    # with RR timing features
-    python -m src.ml.train --dataset mitbih --limit 3000 --epochs 2   # quick check
+References
+----------
+.. [1] Cui, Y., Jia, M., Lin, T. Y., Song, Y., & Belongie, S. (2019).
+       Class-balanced loss based on effective number of samples.
+       Proceedings of the IEEE/CVF CVPR, 9268-9277.
+       Access: https://arxiv.org/abs/1901.05555
+.. [2] Lin, T. Y., Goyal, P., Girshick, R., He, K., & Dollár, P. (2017).
+       Focal loss for dense object detection. Proceedings of the IEEE ICCV, 2980-2988.
+       Access: https://arxiv.org/abs/1708.02002
 
-Only train and validation are used here. The test set is left alone until the
-final evaluation.
+       Regarding the first article, I also looked and took inspiration from the publication's github repo:
+       https://github.com/richardaecn/class-balanced-loss which has a nice implementation of the
+       class-balanced loss, but I ended up using the focal loss instead, which is simpler and works well
+       for this task I think.
 """
 import argparse
 import json
 import time
-from pathlib import Path
 
 import numpy as np
 import torch
@@ -20,37 +25,48 @@ from sklearn.metrics import f1_score
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 
-from src.ml.data import (MITBIH_CLASSES, PTBXL_CLASSES, ROOT, assert_no_leakage,
-                         load_mitbih, load_ptbxl, mitbih_group_split, ptbxl_split,
-                         rr_features)
-from src.ml.models import ECGNet, count_parameters
+from src.ml.data import (
+    MITBIH_CLASSES,
+    PTBXL_CLASSES,
+    ROOT,
+    assert_no_leakage,
+    load_mitbih,
+    load_ptbxl,
+    mitbih_group_split,
+    ptbxl_split,
+    rr_features,
+)
+from src.ml.models import ECGNet, WeightedFocalLoss, count_parameters
 
 MODELS_DIR = ROOT / "models"
 
 
 def get_data(dataset, rr=False):
-    # returns X, extra features, y, the split indices and the class names
-    # extra has 0 columns when it is not used, so the rest of the code stays the same
     if dataset == "mitbih":
         d = load_mitbih()
         split = mitbih_group_split(d["y"], d["groups"])
         assert_no_leakage(split, d["groups"], "patient group")
-        if rr:
-            extra = rr_features(d["positions"], d["record_ids"])
-        else:
-            extra = np.zeros((len(d["y"]), 0), dtype=np.float32)
+        extra = (
+            rr_features(d["positions"], d["record_ids"])
+            if rr
+            else np.zeros((len(d["y"]), 0), dtype=np.float32)
+        )
         return d["X"], extra, d["y"], split, MITBIH_CLASSES
+
     d = load_ptbxl()
     split = ptbxl_split(d["strat_fold"])
     assert_no_leakage(split, d["patient_id"], "patient")
     return d["X"], np.zeros((len(d["y"]), 0), dtype=np.float32), d["y"], split, PTBXL_CLASSES
 
 
-def class_weights(y_train, n_classes, power):
-    # computed on the training part only. power=1 is the fully balanced weight,
-    # 0.5 is softer (the rarest class would get a huge weight otherwise)
+def class_weights(y_train, n_classes, power, max_weight=10.0):
     counts = np.bincount(y_train, minlength=n_classes).astype(np.float64)
-    w = (len(y_train) / (n_classes * counts)) ** power
+    present = counts > 0
+    w = np.ones(n_classes, dtype=np.float64)
+    if present.any():
+        w[present] = (len(y_train) / (present.sum() * counts[present])) ** power
+        w[present] = w[present] / w[present].min()
+        w = np.clip(w, 1.0, max_weight)
     return torch.tensor(w, dtype=torch.float32)
 
 
@@ -75,9 +91,11 @@ def run_epoch(model, loader, loss_fn, device, optimizer=None):
     preds = np.concatenate(preds)
     targets = np.concatenate(targets)
     n = len(targets)
-    return {"loss": total_loss / n,
-            "acc": float((preds == targets).mean()),
-            "f1": float(f1_score(targets, preds, average="macro", zero_division=0))}
+    return {
+        "loss": total_loss / n,
+        "acc": float((preds == targets).mean()),
+        "f1": float(f1_score(targets, preds, average="macro", zero_division=0)),
+    }
 
 
 def main():
@@ -87,14 +105,14 @@ def main():
     ap.add_argument("--batch-size", type=int, default=256)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-power", type=float, default=0.5)
+    ap.add_argument("--focal-gamma", type=float, default=1.5, help="0 uses plain cross-entropy")
     ap.add_argument("--patience", type=int, default=8)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--rr", action="store_true", help="MIT-BIH only: add RR timing features")
-    ap.add_argument("--limit", type=int, default=0, help="use only this many training samples (quick check)")
-    ap.add_argument("--name", default=None, help="name of the saved model, default is the dataset name")
+    ap.add_argument("--limit", type=int, default=0, help="use only this many training samples")
+    ap.add_argument("--name", default=None, help="saved checkpoint name")
     args = ap.parse_args()
 
-    # fixed seeds, results can still differ a bit between machines (GPU)
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -108,7 +126,6 @@ def main():
     if args.limit:
         train_idx = np.random.default_rng(args.seed).permutation(train_idx)[:args.limit]
 
-    # standardise the extra features with the TRAINING part only
     n_extra = extra.shape[1]
     if n_extra:
         extra_mean = extra[split["train"]].mean(0)
@@ -118,8 +135,11 @@ def main():
         extra_mean = extra_std = np.zeros(0, dtype=np.float32)
 
     def make_loader(idx, shuffle):
-        ds = TensorDataset(torch.from_numpy(X[idx]), torch.from_numpy(extra[idx]),
-                           torch.from_numpy(y[idx]))
+        ds = TensorDataset(
+            torch.from_numpy(X[idx]),
+            torch.from_numpy(extra[idx]),
+            torch.from_numpy(y[idx]),
+        )
         return DataLoader(ds, batch_size=args.batch_size, shuffle=shuffle)
 
     train_loader = make_loader(train_idx, True)
@@ -127,7 +147,10 @@ def main():
 
     model = ECGNet(in_channels=X.shape[1], n_classes=n_classes, n_extra=n_extra).to(device)
     weights = class_weights(y[train_idx], n_classes, args.weight_power)
-    loss_fn = nn.CrossEntropyLoss(weight=weights.to(device))
+    if args.focal_gamma > 0:
+        loss_fn = WeightedFocalLoss(weight=weights.to(device), gamma=args.focal_gamma)
+    else:
+        loss_fn = nn.CrossEntropyLoss(weight=weights.to(device))
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4)
 
     print(f"dataset={args.dataset} device={device} params={count_parameters(model)}")
@@ -142,19 +165,29 @@ def main():
         tr = run_epoch(model, train_loader, loss_fn, device, optimizer)
         va = run_epoch(model, val_loader, loss_fn, device)
         history.append({"epoch": epoch, "train": tr, "val": va})
-        print(f"epoch {epoch:3d} | train loss {tr['loss']:.4f} f1 {tr['f1']:.3f} | "
-              f"val loss {va['loss']:.4f} acc {va['acc']:.3f} f1 {va['f1']:.3f} | {time.time() - t0:.0f}s")
+        print(
+            f"epoch {epoch:3d} | train loss {tr['loss']:.4f} f1 {tr['f1']:.3f} | "
+            f"val loss {va['loss']:.4f} acc {va['acc']:.3f} f1 {va['f1']:.3f} | {time.time() - t0:.0f}s"
+        )
 
-        # keep the checkpoint with the best validation macro F1
         if va["f1"] > best_f1:
             best_f1, best_epoch = va["f1"], epoch
-            torch.save({"state_dict": model.state_dict(),
-                        "in_channels": X.shape[1], "n_classes": n_classes,
-                        "n_extra": n_extra, "extra_mean": extra_mean.tolist(),
-                        "extra_std": extra_std.tolist(),
-                        "class_names": list(classes), "epoch": epoch,
-                        "val_f1": best_f1, "args": vars(args)},
-                       MODELS_DIR / f"{name}.pt")
+            torch.save(
+                {
+                    "state_dict": model.state_dict(),
+                    "in_channels": X.shape[1],
+                    "n_classes": n_classes,
+                    "n_extra": n_extra,
+                    "extra_mean": extra_mean.tolist(),
+                    "extra_std": extra_std.tolist(),
+                    "class_names": list(classes),
+                    "thresholds": [0.5] * n_classes,
+                    "epoch": epoch,
+                    "val_f1": best_f1,
+                    "args": vars(args),
+                },
+                MODELS_DIR / f"{name}.pt",
+            )
         elif epoch - best_epoch >= args.patience:
             print(f"no improvement for {args.patience} epochs, stopping")
             break
