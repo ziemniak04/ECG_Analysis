@@ -1,12 +1,25 @@
-"""Everything the Streamlit app needs to run the models on a new recording.
+"""Inference pipeline for the Streamlit ECG viewer.
 
-No streamlit in here, so it can be tested on its own. The preprocessing has to
-be the same as in training (preprocessing code is reused for that):
-  1. filter the whole recording (high-pass 0.5 Hz, low-pass 45 Hz, order 4, zero-phase, no notch)
-  2. z-score every lead
-  3. MIT-BIH: cut a window of 90 samples before / 162 after every R-peak
-     PTB-XL:   cut 10 s windows (1000 samples at 100 Hz)
+Reuses the exact filtering and z-score standardization functions from training
+to prevent training-serving feature skew.
+
+References
+----------
+.. [1] Sculley, D., Holt, G., Golovin, D., Davydov, E., Phillips, T., Ebner, D.,
+       Chaudhary, V., Young, M., Crespo, J. F., & Dennison, D. (2015).
+       Hidden technical debt in machine learning systems. Advances in Neural
+       Information Processing Systems (NeurIPS), 28.
+       Access: https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html
+.. [2] Strodthoff, N., Wagner, P., Schaeffter, T., & Samek, W. (2020).
+       Deep learning for ECG analysis: Benchmarks and insights from PTB-XL.
+       IEEE Journal of Biomedical and Health Informatics, 25(5), 1519-1528.
+       Access: https://arxiv.org/abs/2004.13701
+
+       I took the first articles advice of "reusing the exact preprocessing functions from training" to avoid
+       training-serving skew. And the second one I used to get the idea of how to preprocess the PTB-XL data,
+       and also to get the lead names and the rhythm classes.
 """
+
 import io
 import tempfile
 from dataclasses import dataclass

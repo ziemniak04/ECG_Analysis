@@ -1,8 +1,27 @@
-"""1D-CNN with residual blocks, used for both datasets.
+"""1D Residual CNN architecture and imbalance-aware loss for ECG classification.
 
-MIT-BIH: in_channels=2,  n_classes=5  (input length 252, optionally n_extra=5 RR features)
-PTB-XL:  in_channels=12, n_classes=4  (input length 1000)
+Used for both beat-level classification:
+    (MIT-BIH: in_channels=2, n_classes=5,length=252, optional n_extra=5 RR features)
+    and rhythm-level classification (PTB-XL: in_channels=12, n_classes=4, length=1000)
+
+References
+----------
+.. [1] He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for
+       image recognition. Proceedings of the IEEE CVPR, 770-778.
+       Access: https://arxiv.org/abs/1512.03385
+.. [2] Lin, T. Y., Goyal, P., Girshick, R., He, K., & Dollár, P. (2017).
+       Focal loss for dense object detection. Proceedings of the IEEE ICCV, 2980-2988.
+       Access: https://arxiv.org/abs/1708.02002
+
+    I just want to mention that the first article even though is about image recognition,
+    but the architecture is very general and can be applied to 1D signals as well, and that
+    is where I took inspiration from.
+
+    The second article was also not about ECG classification, but it was a very good article
+    that explained the focal loss and how it can be used to deal with class imbalance, which
+    seems to be a common problem not only in ECG classification, but universally as well.
 """
+
 import torch
 from torch import nn
 

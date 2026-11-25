@@ -1,11 +1,14 @@
-"""Evaluate a trained model on the validation or test split.
+"""Evaluate a trained model on the validation or held-out test split.
 
-Examples (from the repo root):
-    python -m src.ml.evaluate --dataset mitbih --split val
-    python -m src.ml.evaluate --dataset ptbxl --split test
-
-Use --split val while you are still deciding things. The test split should be
-run once at the very end, and never used to pick settings.
+References
+----------
+.. [1] Saito, T., & Rehmsmeier, M. (2015). The precision-recall plot is more
+       informative than the ROC plot when evaluating binary classifiers on
+       imbalanced datasets. PLoS ONE, 10(3), e0118432.
+       Access: https://pmc.ncbi.nlm.nih.gov/articles/PMC4349800/
+.. [2] Lipton, Z. C., Elkan, C., & Naryanaswamy, B. (2014). Optimal thresholding of
+       classifiers to maximize F1 measure. ECML PKDD, 225-239.
+       Access: https://arxiv.org/abs/1402.1892
 """
 import argparse
 import json

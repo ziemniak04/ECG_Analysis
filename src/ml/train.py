@@ -1,14 +1,21 @@
-"""Training loop for both datasets.
+"""Training loop for MIT-BIH beat and PTB-XL rhythm models.
 
-Examples (from the repo root):
-    python -m src.ml.train --dataset mitbih
-    python -m src.ml.train --dataset ptbxl --epochs 30
-    python -m src.ml.train --dataset mitbih --rr --name mitbih_rr    # with RR timing features
-    python -m src.ml.train --dataset mitbih --limit 3000 --epochs 2   # quick check
+References
+----------
+.. [1] Cui, Y., Jia, M., Lin, T. Y., Song, Y., & Belongie, S. (2019).
+       Class-balanced loss based on effective number of samples.
+       Proceedings of the IEEE/CVF CVPR, 9268-9277.
+       Access: https://arxiv.org/abs/1901.05555
+.. [2] Lin, T. Y., Goyal, P., Girshick, R., He, K., & Dollár, P. (2017).
+       Focal loss for dense object detection. Proceedings of the IEEE ICCV, 2980-2988.
+       Access: https://arxiv.org/abs/1708.02002
 
-Only train and validation are used here. The test set is left alone until the
-final evaluation.
+       Regarding the first article, I also looked and took inspiration from the publication's github repo:
+       https://github.com/richardaecn/class-balanced-loss which has a nice implementation of the
+       class-balanced loss, but I ended up using the focal loss instead, which is simpler and works well
+       for this task I think.
 """
+
 import argparse
 import json
 import time
