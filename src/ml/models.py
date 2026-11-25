@@ -23,10 +23,13 @@ References
 """
 
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 
 class ResBlock(nn.Module):
+    """Residual 1D convolutional block with BatchNorm and LeakyReLU."""
+
     def __init__(self, in_ch, out_ch, stride=1, kernel=7):
         super().__init__()
         pad = kernel // 2
@@ -36,7 +39,6 @@ class ResBlock(nn.Module):
         self.bn2 = nn.BatchNorm1d(out_ch)
         self.act = nn.LeakyReLU(0.1)
 
-        # the skip connection needs a 1x1 conv when the shape changes
         if stride != 1 or in_ch != out_ch:
             self.skip = nn.Sequential(
                 nn.Conv1d(in_ch, out_ch, 1, stride=stride, bias=False),
@@ -52,6 +54,8 @@ class ResBlock(nn.Module):
 
 
 class ECGNet(nn.Module):
+    """1D Residual CNN with AdaptiveAvgPool1d and optional RR-interval fusion"""
+
     def __init__(self, in_channels, n_classes, widths=(32, 64, 128), dropout=0.4, n_extra=0):
         super().__init__()
         self.stem = nn.Sequential(
@@ -63,15 +67,13 @@ class ECGNet(nn.Module):
         blocks = []
         prev = widths[0]
         for i, w in enumerate(widths):
-            # first block keeps the length, the others halve it
             blocks.append(ResBlock(prev, w, stride=1 if i == 0 else 2))
             prev = w
         self.blocks = nn.Sequential(*blocks)
 
-        # global average pooling, so the head does not care about the input length
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.head = nn.Sequential(
-            nn.Linear(prev + n_extra, 64),  # n_extra = extra features next to the CNN output
+            nn.Linear(prev + n_extra, 64),
             nn.LeakyReLU(0.1),
             nn.Dropout(dropout),
             nn.Linear(64, n_classes),
@@ -82,7 +84,24 @@ class ECGNet(nn.Module):
         x = self.pool(x).squeeze(-1)
         if extra is not None and extra.shape[1] > 0:
             x = torch.cat([x, extra], dim=1)
-        return self.head(x)  # raw logits, softmax is applied outside
+        return self.head(x)
+
+
+class WeightedFocalLoss(nn.Module):
+    """focal loss with optional class weights to focus training on hard minority beats"""
+
+    def __init__(self, weight=None, gamma=1.5):
+        super().__init__()
+        self.weight = weight
+        self.gamma = gamma
+
+    def forward(self, logits, targets):
+        ce = F.cross_entropy(logits, targets, reduction="none")
+        pt = torch.exp(-ce)
+        loss = ((1.0 - pt) ** self.gamma) * ce
+        if self.weight is not None:
+            loss = self.weight[targets] * loss
+        return loss.mean()
 
 
 def count_parameters(model):
