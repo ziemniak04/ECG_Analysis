@@ -56,15 +56,20 @@ def tune_class_thresholds(y_true, proba):
     """the idea is to find per class probability thresholds on validation data to maximize F1"""
     k = proba.shape[1]
     thresholds = np.full(k, 0.5, dtype=np.float32)
-    grid = np.linspace(0.15, 0.85, 29)
-    for c in range(k):
-        y_bin = (y_true == c).astype(int)
-        best_f1 = -1.0
-        for th in grid:
-            score = f1_score(y_bin, (proba[:, c] >= th).astype(int), zero_division=0)
-            if score > best_f1:
-                best_f1 = score
-                thresholds[c] = float(th)
+    grid = np.linspace(0.35, 0.75, 17)
+    best_macro = f1_score(y_true, apply_thresholds(proba, thresholds), average="macro", zero_division=0)
+
+    for _ in range(2):
+        for c in range(k):
+            best_th = thresholds[c]
+            for th in grid:
+                candidate = thresholds.copy()
+                candidate[c] = float(th)
+                score = f1_score(y_true, apply_thresholds(proba, candidate), average="macro", zero_division=0)
+                if score > best_macro:
+                    best_macro = score
+                    best_th = float(th)
+            thresholds[c] = best_th
     return thresholds
 
 
