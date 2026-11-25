@@ -12,3 +12,5 @@ mitdb_unzipped/
 
 .vscode/
 .streamlit/secrets.toml
+results/ml/*.png
+results/ml/.*.lock
