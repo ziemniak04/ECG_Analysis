@@ -1,1 +1,1 @@
-"""Modelling code: data loading, patient-separated splits, models, metrics."""
+"""Modelling package: patient-separated data splits, 1D-ResNet, evaluation, inference, and viewer helpers."""
