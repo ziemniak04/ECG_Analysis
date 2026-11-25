@@ -56,8 +56,9 @@ class ResBlock(nn.Module):
 class ECGNet(nn.Module):
     """1D Residual CNN with AdaptiveAvgPool1d and optional RR-interval fusion"""
 
-    def __init__(self, in_channels, n_classes, widths=(32, 64, 128), dropout=0.4, n_extra=0):
+    def __init__(self, in_channels, n_classes, widths=(32, 64, 128), dropout=0.4, n_extra=0, rr_dropout=0.3):
         super().__init__()
+        self.rr_dropout = rr_dropout
         self.stem = nn.Sequential(
             nn.Conv1d(in_channels, widths[0], 7, padding=3, bias=False),
             nn.BatchNorm1d(widths[0]),
@@ -83,6 +84,8 @@ class ECGNet(nn.Module):
         x = self.blocks(self.stem(x))
         x = self.pool(x).squeeze(-1)
         if extra is not None and extra.shape[1] > 0:
+            if self.training and self.rr_dropout > 0:
+                extra = F.dropout(extra, p=self.rr_dropout, training=True)
             x = torch.cat([x, extra], dim=1)
         return self.head(x)
 
