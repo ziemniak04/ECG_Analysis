@@ -2,14 +2,12 @@
 
 # ML pipeline: technical documentation
 
-<p>
-  <img src="[https://img.shields.io/badge/Python-3.12-B91C1C?style=for-the-badge&logo=python&logoColor=white](https://img.shields.io/badge/Python-3.12-B91C1C?style=for-the-badge&logo=python&logoColor=white)" alt="Python 3.12" height="26" />
-  <img src="[https://img.shields.io/badge/PyTorch-1D_ResNet-DC2626?style=for-the-badge&logo=pytorch&logoColor=white](https://img.shields.io/badge/PyTorch-1D_ResNet-DC2626?style=for-the-badge&logo=pytorch&logoColor=white)" alt="PyTorch" height="26" />
-  <img src="[https://img.shields.io/badge/scikit--learn-Metrics-991B1B?style=for-the-badge&logo=scikitlearn&logoColor=white](https://img.shields.io/badge/scikit--learn-Metrics-991B1B?style=for-the-badge&logo=scikitlearn&logoColor=white)" alt="scikit-learn" height="26" />
-  <img src="[https://img.shields.io/badge/Streamlit-Viewer-E11D48?style=for-the-badge&logo=streamlit&logoColor=white](https://img.shields.io/badge/Streamlit-Viewer-E11D48?style=for-the-badge&logo=streamlit&logoColor=white)" alt="Streamlit" height="26" />
-  <img src="[https://img.shields.io/badge/Plotly-Charts-BE123C?style=for-the-badge&logo=plotly&logoColor=white](https://img.shields.io/badge/Plotly-Charts-BE123C?style=for-the-badge&logo=plotly&logoColor=white)" alt="Plotly" height="26" />
-  <img src="[https://img.shields.io/badge/WFDB-ECG_Signals-9F1239?style=for-the-badge&logo=heart-pulse&logoColor=white](https://img.shields.io/badge/WFDB-ECG_Signals-9F1239?style=for-the-badge&logo=heart-pulse&logoColor=white)" alt="WFDB" height="26" />
-</p>
+![Python 3.12](https://img.shields.io/badge/Python-3.12-B91C1C?style=flat&logo=python&logoColor=white&labelColor=1F2937)
+![PyTorch](https://img.shields.io/badge/PyTorch-1D_ResNet-DC2626?style=flat&logo=pytorch&logoColor=white&labelColor=1F2937)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Metrics-991B1B?style=flat&logo=scikitlearn&logoColor=white&labelColor=1F2937)
+![Streamlit](https://img.shields.io/badge/Streamlit-Viewer-E11D48?style=flat&logo=streamlit&logoColor=white&labelColor=1F2937)
+![Plotly](https://img.shields.io/badge/Plotly-Charts-BE123C?style=flat&logo=plotly&logoColor=white&labelColor=1F2937)
+![WFDB](https://img.shields.io/badge/WFDB-ECG_Signals-9F1239?style=flat&labelColor=1F2937)
 
 Notes for the modelling part of the project (1D-CNN models, training, metrics, Streamlit app).  
 The preprocessing and the data export are described in `README_preprocessing.md` and `ECG_DATA_HANDOFF_FOR_ANNA.md` in the repo root. This file only covers what was added on top of that.
