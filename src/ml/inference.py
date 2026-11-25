@@ -34,6 +34,8 @@ import wfdb
 from scipy.signal import resample_poly
 from wfdb import processing
 
+from functools import lru_cache
+
 from src.ml.data import CACHE_DIR, MITBIH_CLASSES, PTBXL_CLASSES, ROOT, rr_features
 from src.ml.evaluate import apply_thresholds, validate_checkpoint
 from src.ml.models import ECGNet
@@ -243,14 +245,19 @@ def classify_rhythm(loaded, filtered):
     }
 
 
+@lru_cache(maxsize=1)
+def _mitbih_record_splits():
+    from src.ml.data import mitbih_group_split
+    with np.load(CACHE_DIR / "mitbih_v2.npz", allow_pickle=False) as f:
+        y, groups, rec = f["y"], f["groups"], f["record_ids"]
+    split = mitbih_group_split(y, groups)
+    return {part: set(rec[idx].tolist()) for part, idx in split.items()}
+
+
 def split_of_mitbih_record(record_id):
     try:
-        from src.ml.data import mitbih_group_split
-        with np.load(CACHE_DIR / "mitbih_v2.npz", allow_pickle=False) as f:
-            y, groups, rec = f["y"], f["groups"], f["record_ids"]
-        split = mitbih_group_split(y, groups)
-        for part, idx in split.items():
-            if str(record_id) in set(rec[idx].tolist()):
+        for part, records in _mitbih_record_splits().items():
+            if str(record_id) in records:
                 return part
     except Exception:
         pass
