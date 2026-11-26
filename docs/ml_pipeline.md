@@ -50,6 +50,16 @@ python -m pip install torch scikit-learn streamlit plotly tqdm pytest
 
 All commands below are run from the repo root with the venv active, and with `python -m ...` (not by running the file directly), otherwise the `src` imports do not work.
 
+### Pretrained models (optional, skips training)
+
+Trained checkpoints (`models/*.pt`) and tuned thresholds (`results/ml/*.json`) are ignored by git, so they are published in [**GitHub Releases (`v1.0.0-models`)**](https://github.com/ziemniak04/ECG_Analysis/releases/tag/v1.0.0-models) (`ml_models_and_results.zip`). To run the Streamlit app without downloading the raw datasets or retraining from scratch, download and extract the archive into the repo root:
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/ziemniak04/ECG_Analysis/releases/download/v1.0.0-models/ml_models_and_results.zip" -OutFile ml_models_and_results.zip
+Expand-Archive ml_models_and_results.zip -DestinationPath . -Force
+Remove-Item ml_models_and_results.zip
+```
+
 ---
 
 ## 2. Getting the data
@@ -371,7 +381,7 @@ Both models (`mitbih` baseline and `mitbih_rr`) are evaluated on the test split 
 streamlit run streamlit_app.py
 ```
 
-Run from the repo root with the venv active. It opens in the browser and needs the trained checkpoints in `models/` plus the saved thresholds in `results/ml/`.
+Run from the repo root with the venv active. It opens in the browser and needs the trained checkpoints in `models/` plus the saved thresholds in `results/ml/` — either generated locally in sections 4–5 or downloaded from [**GitHub Releases (`v1.0.0-models`)**](https://github.com/ziemniak04/ECG_Analysis/releases/tag/v1.0.0-models) (`ml_models_and_results.zip`, see [Setup](#pretrained-models-optional-skips-training)).
 
 ### How I split the code
 
